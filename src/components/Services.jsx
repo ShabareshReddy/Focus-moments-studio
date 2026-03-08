@@ -55,12 +55,9 @@ export default function Services() {
                             className="group rounded-3xl overflow-hidden bg-brand-light border border-black/5 hover:shadow-2xl hover:shadow-brand-orange/10 transition-all duration-300"
                         >
                             <div className="relative h-64 sm:h-80 w-full overflow-hidden">
-                                <Image
-                                    src={category.image}
-                                    alt={category.title}
-                                    fill
-                                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                />
+                                <div className="w-full h-full bg-brand-dark/10 flex items-center justify-center text-brand-dark/40">
+                                    Placeholder Image
+                                </div>
                                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-brand-dark/20 to-transparent flex items-end p-8">
                                     <div className="flex items-center gap-4">
                                         <div className="bg-brand-orange p-3 rounded-xl shadow-lg">

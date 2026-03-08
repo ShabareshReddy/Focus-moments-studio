@@ -1,7 +1,6 @@
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import GlobalLayoutWrapper from "@/components/GlobalLayoutWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,11 +23,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} ${outfit.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
-        <Navbar />
-        <main className="flex-grow">
+        <GlobalLayoutWrapper>
           {children}
-        </main>
-        <Footer />
+        </GlobalLayoutWrapper>
       </body>
     </html>
   );

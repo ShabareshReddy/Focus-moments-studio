@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
 @theme inline {
@@ -8,7 +9,10 @@
 
   --color-background: var(--color-brand-light);
   --color-foreground: var(--color-brand-dark);
-  
+
+  --font-inter: "Inter", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+
   --font-sans: var(--font-inter);
   --font-heading: var(--font-outfit);
 }
@@ -20,7 +24,50 @@
     @apply font-sans;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading tracking-tight;
+  }
+}
+
+@layer utilities {
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 35s linear infinite;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-reverse {
+    0% {
+      transform: translateX(-50%);
+    }
+
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  .animate-marquee-reverse {
+    animation: marquee-reverse 35s linear infinite;
+  }
+
+  .animate-marquee-reverse:hover {
+    animation-play-state: paused;
   }
 }

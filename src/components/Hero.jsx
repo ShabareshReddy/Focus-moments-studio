@@ -4,47 +4,84 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
-const backgroundImages = [
-    "/images/image.png",
-    "/images/image copy.png",
-    "/images/image copy 2.png"
-];
+import { supabase } from "@/lib/supabase";
 
 export default function Hero() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const fetchHeroImages = async () => {
+            try {
+                const { data, error } = await supabase.storage
+                    .from('gallery-images')
+                    .list('hero', {
+                        limit: 20,
+                        offset: 0,
+                        sortBy: { column: 'created_at', order: 'desc' },
+                    });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    const validFiles = data.filter(
+                        file => file.name !== '.emptyFolderPlaceholder' && file.name !== 'hero'
+                    );
+                    const urls = validFiles.map(file => {
+                        const { data: { publicUrl } } = supabase
+                            .storage
+                            .from('gallery-images')
+                            .getPublicUrl(`hero/${file.name}`);
+                        return publicUrl;
+                    });
+                    setImages(urls);
+                }
+            } catch (error) {
+                console.error('Error fetching hero images:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHeroImages();
+    }, []);
+
+    useEffect(() => {
+        if (images.length === 0) return;
         const timer = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         }, 6000); // Change image every 6 seconds
         return () => clearInterval(timer);
-    }, []);
+    }, [images]);
 
     return (
         <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-brand-dark">
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="popLayout">
-                    <motion.div
-                        key={currentIndex}
-                        initial={{ opacity: 0, scale: 1.15 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{
-                            opacity: { duration: 1.5, ease: "easeInOut" },
-                            scale: { duration: 10, ease: "linear" }
-                        }}
-                        className="absolute inset-0"
-                    >
-                        <Image
-                            src={backgroundImages[currentIndex]}
-                            alt="Focus Moments Studio baby photography background"
-                            fill
-                            priority={currentIndex === 0}
-                            className="object-cover object-center"
-                        />
-                    </motion.div>
+                    {images.length > 0 && (
+                        <motion.div
+                            key={currentIndex}
+                            initial={{ opacity: 0, scale: 1.15 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{
+                                opacity: { duration: 1.5, ease: "easeInOut" },
+                                scale: { duration: 10, ease: "linear" }
+                            }}
+                            className="absolute inset-0"
+                        >
+                            <Image
+                                src={images[currentIndex]}
+                                alt="Focus Moments Studio baby photography background"
+                                fill
+                                priority={currentIndex === 0}
+                                className="object-cover object-center"
+                                sizes="100vw"
+                            />
+                        </motion.div>
+                    )}
                 </AnimatePresence>
                 {/* Dark overlay for contrast */}
                 <div className="absolute inset-0 bg-brand-dark/40 sm:bg-brand-dark/30 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent z-10"></div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Camera, Menu, X } from "lucide-react";
+import BrandLogo from "./BrandLogo";
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -23,28 +24,40 @@ export default function Navbar() {
         { name: "About", href: "#about" },
     ];
 
+    const isSolid = isScrolled || isMobileMenuOpen;
+
     return (
         <nav
-            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
-                ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
-                : "bg-transparent py-5"
+            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isSolid
+                ? "bg-white/95 backdrop-blur-md shadow-sm py-1.5"
+                : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-sm py-2"
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <div className="bg-brand-orange p-2 rounded-lg text-white group-hover:bg-brand-dark transition-colors">
-                            <Camera size={24} />
+                    {/* Logo: SVG icon + stacked text side by side */}
+                    <Link href="/" className="flex items-center gap-1 group">
+
+                        <div className="flex items-center justify-center w-[60px] h-[44px]">
+                            <BrandLogo
+                                className="w-full h-full scale-[1.6] origin-center transition-transform duration-200 group-hover:scale-[1.7]"
+                                variant={isSolid ? "colored" : "white"}
+                            />
                         </div>
-                        <div className="flex flex-col">
-                            <span className={`font-heading font-black text-xl tracking-tight leading-none ${isScrolled ? "text-brand-dark" : "text-brand-dark lg:text-white"}`}>
+
+                        <div className="flex flex-col justify-center leading-tight">
+                            <span
+                                className={`font-heading font-bold text-[18px] tracking-tight ${isSolid ? "text-brand-dark" : "text-white"
+                                    }`}
+                            >
                                 FOCUS MOMENTS
                             </span>
-                            <span className={`text-[10px] font-bold tracking-[0.2em] leading-none ${isScrolled ? "text-brand-orange" : "text-brand-orange lg:text-white/80"}`}>
+
+                            <span className="text-[12px] font-bold tracking-[0.17em] text-brand-orange">
                                 STUDIO
                             </span>
                         </div>
+
                     </Link>
 
                     {/* Desktop Nav */}
@@ -54,7 +67,7 @@ export default function Navbar() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className={`text-sm font-medium transition-colors hover:text-brand-orange ${isScrolled ? "text-brand-dark/80" : "text-brand-dark lg:text-white/90"
+                                    className={`text-md font-outfit font-medium transition-colors hover:text-brand-orange ${isSolid ? "text-brand-dark" : "text-white/90"
                                         }`}
                                 >
                                     {link.name}
@@ -73,7 +86,7 @@ export default function Navbar() {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className={isScrolled ? "text-brand-dark" : "text-brand-dark"}
+                            className={isSolid ? "text-brand-dark" : "text-white"}
                         >
                             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                         </button>

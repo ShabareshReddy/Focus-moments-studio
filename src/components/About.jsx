@@ -2,83 +2,121 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Camera, Star, Heart, Award } from "lucide-react";
+
+const stats = [
+    { icon: Heart, value: "500+", label: "Families Served" },
+    { icon: Star, value: "5.0", label: "Google Rating" },
+    { icon: Camera, value: "8+", label: "Years Experience" },
+    { icon: Award, value: "100%", label: "Satisfaction" },
+];
+
+const highlights = [
+    "Professional, patient handling of newborns & babies",
+    "Clean studio environment with engaging props",
+    "Locally trusted with a 5.0 ★ Google Rating",
+    "Creative direction personally by Tulasi Prasad",
+];
 
 export default function About() {
-    const highlights = [
-        "Professional, patient handling of newborns",
-        "Clean studio environment with engaging props",
-        "Locally trusted with a 5.0 Google Rating",
-        "Creative direction by Tulasi Prasad",
-    ];
-
     return (
-        <section id="about" className="py-24 bg-brand-light overflow-hidden">
+        <section id="about" className="py-24 bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col lg:flex-row items-center gap-16">
 
-                    {/* Image Side */}
+                {/* Section Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-16"
+                >
+                    <span className="px-4 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-lg font-bold tracking-[0.2em] uppercase mb-4">
+                        About The Studio
+                    </span>
+
+                </motion.div>
+
+
+
+                {/* Main two-column block */}
+                <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+                    {/* Left: Image */}
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
+                        initial={{ opacity: 0, x: -40 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-50px" }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="w-full lg:w-1/2 relative"
+                        className="w-full lg:w-5/12 relative"
                     >
-                        <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl aspect-[4/5] max-w-md mx-auto lg:mx-0">
+                        {/* Orange accent frame */}
+                        <div className="absolute -top-4 -left-4 w-full h-full border-2 border-brand-orange/40 rounded-3xl" />
+                        <div className="relative z-10 rounded-3xl aspect-[4/5] overflow-hidden shadow-2xl">
                             <Image
-                                src="https://images.unsplash.com/photo-1554047688-6625fb4791da?q=80&w=1000&auto=format&fit=crop"
-                                alt="Photographer at work"
+                                src="/image/efim-borisov-JtbH32Q-tLI-unsplash.jpg"
+                                alt="Focus Moments Studio Photography"
                                 fill
-                                className="object-cover"
+                                className="object-cover object-center"
+                                sizes="(max-width: 768px) 100vw, 40vw"
                             />
-                        </div>
-                        {/* Decorative backing */}
-                        <div className="absolute top-8 -right-4 lg:right-12 bottom-8 left-8 lg:-left-8 border-2 border-brand-orange rounded-3xl -z-10" />
-                        <div className="absolute -bottom-6 -right-6 lg:right-4 bg-white p-6 rounded-2xl shadow-xl z-20 hidden sm:block">
-                            <p className="font-heading font-bold text-4xl text-brand-dark mb-1">100+</p>
-                            <p className="text-brand-dark/70 font-medium">Happy Families</p>
                         </div>
                     </motion.div>
 
-                    {/* Text Side */}
-                    <div className="w-full lg:w-1/2">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <h2 className="text-sm font-bold tracking-widest text-brand-orange uppercase mb-3">About The Studio</h2>
-                            <h3 className="text-4xl md:text-5xl font-heading font-extrabold text-brand-dark mb-6 leading-tight">
-                                Crafting Memories With Patience & Care
-                            </h3>
-                            <p className="text-lg text-brand-dark/70 mb-6 leading-relaxed">
-                                At Focus Moments Studio, led by <strong>Tulasi Prasad</strong>, we believe photography is more than just taking pictures—it's about telling your unique story. Located in the heart of Tirupati, we have built a local reputation for our exceptional patience and calming presence, especially during newborn and baby sessions.
-                            </p>
-                            <p className="text-lg text-brand-dark/70 mb-8 leading-relaxed">
-                                Whether you're visiting our clean, fully-equipped indoor studio or scheduling an on-location event shoot, our goal is to provide a comfortable environment where authentic moments happen naturally.
-                            </p>
+                    {/* Right: Text */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="w-full lg:w-7/12"
+                    >
+                        <h3 className="text-3xl md:text-4xl font-heading font-extrabold text-brand-dark mb-5 leading-tight">
+                            Crafting Your Story With{" "}
+                            <span className="text-brand-orange">Patience & Care</span>
+                        </h3>
+                        <p className="text-brand-zinc text-lg leading-relaxed mb-4">
+                            At <strong>Focus Moments Studio</strong>, led by <strong>Tulasi Prasad</strong>, we believe photography is more than just taking pictures — it's about capturing the raw, unscripted emotions that make your story unique.
+                        </p>
+                        <p className="text-brand-zinc text-lg leading-relaxed mb-8">
+                            Located in the heart of <strong>Tirupati</strong>, our fully-equipped studio is designed to create a calm, comfortable space — especially important for baby, newborn, and family sessions. Every session is handled with exceptional patience and creative care.
+                        </p>
 
-                            <ul className="space-y-4 mb-10">
-                                {highlights.map((item, idx) => (
-                                    <li key={idx} className="flex items-start gap-3">
-                                        <CheckCircle2 className="text-brand-orange shrink-0 mt-0.5" size={24} />
-                                        <span className="text-brand-dark font-medium text-lg">{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                        <ul className="space-y-3 mb-10">
+                            {highlights.map((item, idx) => (
+                                <motion.li
+                                    key={idx}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                                    className="flex items-start gap-3"
+                                >
+                                    <CheckCircle2 className="text-brand-orange shrink-0 mt-0.5" size={22} />
+                                    <span className="text-brand-dark font-medium text-base">{item}</span>
+                                </motion.li>
+                            ))}
+                        </ul>
 
+                        <div className="flex flex-wrap gap-4">
                             <a
                                 href="tel:+918328191729"
-                                className="inline-flex items-center justify-center px-8 py-4 bg-brand-dark text-white rounded-full font-semibold text-lg hover:bg-brand-orange transition-colors duration-300 shadow-xl shadow-brand-dark/20"
+                                className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold text-base hover:bg-brand-dark transition-colors duration-300 shadow-lg shadow-brand-orange/30"
                             >
-                                Contact Tulasi Prasad
+                                📞 Call Us Now
                             </a>
-                        </motion.div>
-                    </div>
-
+                            <a
+                                href="https://www.instagram.com/focus_momentsstudio/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center px-8 py-3.5 border-2 border-brand-dark text-brand-dark rounded-full font-semibold text-base hover:bg-brand-dark hover:text-white transition-colors duration-300"
+                            >
+                                📷 Our Instagram
+                            </a>
+                        </div>
+                    </motion.div>
                 </div>
+
             </div>
         </section>
     );
