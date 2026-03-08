@@ -1,17 +1,25 @@
 import { NextResponse } from 'next/server'
 
 export function middleware(request) {
-    // Only protect /admin/dashboard routes
-    if (request.nextUrl.pathname.startsWith('/admin/dashboard')) {
-        const authCookie = request.cookies.get('admin_auth')
-        
-        if (!authCookie || authCookie.value !== 'true') {
-            // Redirect back to login if no cookie
-            return NextResponse.redirect(new URL('/admin', request.url))
+    const { pathname } = request.nextUrl;
+    const authCookie = request.cookies.get('admin_auth');
+    const isAuthenticated = authCookie?.value === 'true';
+
+    // 1. Protect dashboard: not logged in → redirect to login
+    if (pathname.startsWith('/admin/dashboard')) {
+        if (!isAuthenticated) {
+            return NextResponse.redirect(new URL('/admin', request.url));
         }
     }
-    
-    return NextResponse.next()
+
+    // 2. Already logged in visiting /admin login page → redirect to dashboard
+    if (pathname === '/admin') {
+        if (isAuthenticated) {
+            return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+        }
+    }
+
+    return NextResponse.next();
 }
 
 // Specify which routes the middleware should check

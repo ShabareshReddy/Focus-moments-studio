@@ -54,7 +54,7 @@ export default function About() {
                         <div className="absolute -top-4 -left-4 w-full h-full border-2 border-brand-orange/40 rounded-3xl" />
                         <div className="relative z-10 rounded-3xl aspect-[4/5] overflow-hidden shadow-2xl">
                             <Image
-                                src="/image/efim-borisov-JtbH32Q-tLI-unsplash.jpg"
+                                src="/image/tobias-pfeifer-W_9dsX-Go5A-unsplash.jpg"
                                 alt="Focus Moments Studio Photography"
                                 fill
                                 className="object-cover object-center"

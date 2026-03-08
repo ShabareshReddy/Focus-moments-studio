@@ -21,6 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${outfit.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
         <GlobalLayoutWrapper>

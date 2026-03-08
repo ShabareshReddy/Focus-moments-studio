@@ -19,8 +19,8 @@ export default function Navbar() {
 
     const navLinks = [
         { name: "Home", href: "/" },
-        { name: "Services", href: "#services" },
-        { name: "Reviews", href: "#socialproof" },
+        { name: "Portfolio", href: "#portfolio" },
+        { name: "Reviews", href: "#reviews" },
         { name: "About", href: "#about" },
     ];
 
@@ -30,7 +30,7 @@ export default function Navbar() {
         <nav
             className={`fixed top-0 w-full z-50 transition-all duration-300 ${isSolid
                 ? "bg-white/95 backdrop-blur-md shadow-sm py-1.5"
-                : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-sm py-2"
+                : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-xs py-2"
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
