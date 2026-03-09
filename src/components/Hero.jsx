@@ -38,14 +38,14 @@ export default function Hero({ images = [] }) {
                             // All subsequent transitions: fade in normally
                             initial={
                                 isFirstRender.current && currentIndex === 0
-                                    ? { opacity: 1, scale: 1 }
+                                    ? { opacity: 1, scale: 1.08 }  // skip fade but keep zoom
                                     : { opacity: 0, scale: 1.15 }
                             }
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{
-                                opacity: { duration: 1.5, ease: "easeInOut" },
-                                scale: { duration: 10, ease: "linear" },
+                                opacity: { duration: 0.8, ease: "easeInOut" },
+                                scale: { duration: 7, ease: "linear" },
                             }}
                             className="absolute inset-0"
                         >
@@ -75,7 +75,7 @@ export default function Hero({ images = [] }) {
                     <span className="inline-block py-1 px-3 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs sm:text-sm font-semibold tracking-wider mb-6 uppercase">
                         Tirupati's Premier Photo Studio
                     </span>
-                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-heading font-bold text-white mb-6 leading-tight drop-shadow-lg">
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-helvetica font-bold text-white mb-6 leading-tight drop-shadow-lg">
                         Capturing Life's <br className="hidden sm:block" />
                         <span className="text-brand-orange">Most Precious</span> Moments
                     </h1>
