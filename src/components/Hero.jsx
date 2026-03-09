@@ -56,7 +56,7 @@ export default function Hero() {
     }, [images]);
 
     return (
-        <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-brand-dark">
+        <section className="relative h-screen min-h-[600px] flex items-end sm:items-center justify-center overflow-hidden bg-brand-dark">
             {/* Background Image Setup */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="popLayout">
@@ -87,7 +87,7 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-brand-dark/40 sm:bg-brand-dark/30 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent z-10"></div>
             </div>
 
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center mt-20">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center pb-20 sm:pb-0 sm:mt-20">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -105,14 +105,14 @@ export default function Hero() {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link
-                            href="#services"
-                            className="w-full sm:w-auto px-8 py-4 bg-brand-orange text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-orange transition-all duration-300 shadow-lg"
+                            href="#portfolio"
+                            className="w-full sm:w-auto px-8 py-4 bg-brand-orange text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-orange active:scale-95 transition-all duration-150 shadow-lg"
                         >
                             View Our Work
                         </Link>
                         <Link
                             href="tel:+918328191729"
-                            className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white border-2 border-white/50 rounded-full font-semibold text-lg hover:bg-white hover:text-brand-dark transition-all duration-300"
+                            className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white border-2 border-white/50 rounded-full font-semibold text-lg hover:bg-white hover:text-brand-dark active:scale-95 transition-all duration-150"
                         >
                             Book a Session
                         </Link>
@@ -120,12 +120,12 @@ export default function Hero() {
                 </motion.div>
             </div>
 
-            {/* Scroll indicator */}
+            {/* Scroll indicator - hidden on mobile to avoid overlap */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 1 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+                className="hidden sm:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 z-10"
             >
                 <span className="text-white/70 text-xs font-medium uppercase tracking-widest">Scroll to Explore</span>
                 <motion.div

@@ -40,7 +40,7 @@ export default function Footer() {
                             href="https://www.instagram.com/focus_momentsstudio/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-white/40 hover:text-brand-orange transition-colors w-fit"
+                            className="flex items-center gap-2 text-white/40 hover:text-brand-orange active:scale-90 active:opacity-70 transition-all duration-150 w-fit"
                             aria-label="Instagram"
                         >
                             <Instagram size={20} />
@@ -80,7 +80,7 @@ export default function Footer() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <Phone size={15} className="text-brand-orange shrink-0" />
-                                <a href="tel:+918328191729" className="hover:text-brand-orange transition-colors font-medium">+91 83281 91729</a>
+                                <a href="tel:+918328191729" className="hover:text-brand-orange active:opacity-60 transition-all duration-150 font-medium">+91 83281 91729</a>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Clock size={15} className="text-brand-orange shrink-0" />

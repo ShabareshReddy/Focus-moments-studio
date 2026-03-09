@@ -67,7 +67,7 @@ export default function Navbar() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className={`text-md font-outfit font-medium transition-colors hover:text-brand-orange ${isSolid ? "text-brand-dark" : "text-white/90"
+                                    className={`text-md font-outfit font-medium transition-colors hover:text-brand-orange active:opacity-60 ${isSolid ? "text-brand-dark" : "text-white/90"
                                         }`}
                                 >
                                     {link.name}
@@ -76,7 +76,7 @@ export default function Navbar() {
                         </div>
                         <a
                             href="tel:+918328191729"
-                            className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-brand-dark transition-colors shadow-lg shadow-brand-orange/20"
+                            className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-brand-dark active:scale-95 transition-all duration-150 shadow-lg shadow-brand-orange/20"
                         >
                             Book Session
                         </a>
@@ -86,7 +86,7 @@ export default function Navbar() {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className={isSolid ? "text-brand-dark" : "text-white"}
+                            className={`p-2 rounded-full active:scale-90 active:opacity-70 transition-all duration-150 ${isSolid ? "text-brand-dark" : "text-white"}`}
                         >
                             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                         </button>
@@ -96,24 +96,30 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-xl py-4 flex flex-col items-center gap-4">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="text-brand-dark font-medium w-full text-center py-2"
-                        >
-                            {link.name}
-                        </Link>
+                <div className="md:hidden absolute top-full left-0 w-full bg-brand-dark/95 backdrop-blur-xl border-t border-white/10 shadow-2xl py-6 flex flex-col items-center gap-1">
+                    {navLinks.map((link, i) => (
+                        <div key={link.name} className="w-full">
+                            <Link
+                                href={link.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block w-full text-center py-4 text-lg font-semibold text-white/90 hover:text-brand-orange active:text-brand-orange active:scale-95 transition-all duration-150 tracking-wide"
+                            >
+                                {link.name}
+                            </Link>
+                            {i < navLinks.length - 1 && (
+                                <div className="mx-8 h-px bg-white/10" />
+                            )}
+                        </div>
                     ))}
-                    <a
-                        href="tel:+918328191729"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="mt-2 bg-brand-orange text-white px-8 py-3 rounded-full font-semibold"
-                    >
-                        Call Now: +91 8328191729
-                    </a>
+                    <div className="w-full px-6 mt-4">
+                        <a
+                            href="tel:+918328191729"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="block w-full text-center bg-brand-orange text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-brand-orange active:scale-95 active:opacity-80 transition-all duration-150 shadow-lg shadow-brand-orange/30"
+                        >
+                            📞 Call Now: +91 8328191729
+                        </a>
+                    </div>
                 </div>
             )}
         </nav>

@@ -101,7 +101,7 @@ export default function About() {
                         <div className="flex flex-wrap gap-4">
                             <a
                                 href="tel:+918328191729"
-                                className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold text-base hover:bg-brand-dark transition-colors duration-300 shadow-lg shadow-brand-orange/30"
+                                className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold text-base hover:bg-brand-dark active:scale-95 transition-all duration-150 shadow-lg shadow-brand-orange/30"
                             >
                                 📞 Call Us Now
                             </a>
@@ -109,7 +109,7 @@ export default function About() {
                                 href="https://www.instagram.com/focus_momentsstudio/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-8 py-3.5 border-2 border-brand-dark text-brand-dark rounded-full font-semibold text-base hover:bg-brand-dark hover:text-white transition-colors duration-300"
+                                className="inline-flex items-center justify-center px-8 py-3.5 border-2 border-brand-dark text-brand-dark rounded-full font-semibold text-base hover:bg-brand-dark hover:text-white active:scale-95 transition-all duration-150"
                             >
                                 📷 Our Instagram
                             </a>
