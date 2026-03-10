@@ -143,7 +143,7 @@ export default function Pricing() {
                 </motion.div>
 
                 {/* Cards — horizontal scroll on mobile, 3-col grid on desktop */}
-                <div className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-none">
+                <div className="flex gap-5 overflow-x-auto snap-x snap-mandatory pt-4 pb-4 md:pt-0 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-none">
                     {plans.map((plan, i) => (
                         <motion.div
                             key={plan.id}

@@ -137,9 +137,25 @@ export default function Gallery() {
                 </motion.div>
 
                 {/* Category Filters */}
-                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-12">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.05, delayChildren: 0.2 }
+                        }
+                    }}
+                    className="flex flex-wrap justify-center gap-2 md:gap-3 mb-12"
+                >
                     {CATEGORIES.map((category) => (
-                        <button
+                        <motion.button
+                            variants={{
+                                hidden: { opacity: 0, y: 20, filter: "blur(5px)" },
+                                visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: "easeOut" } }
+                            }}
                             key={category}
                             onClick={() => { setActiveCategory(category); setLightboxIndex(null); setVisibleCount(20); }}
                             className={`px-6 py-2 rounded-full text-sm font-outfit font-medium transition-all duration-300 hover:scale-[1.05] active:scale-95 ${activeCategory === category
@@ -148,9 +164,9 @@ export default function Gallery() {
                                 }`}
                         >
                             {category}
-                        </button>
+                        </motion.button>
                     ))}
-                </div>
+                </motion.div>
 
                 {loading ? (
                     <div className="flex justify-center items-center py-20">
