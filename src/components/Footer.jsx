@@ -11,8 +11,8 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
                     {/* Brand Col */}
-                    <div className="flex flex-col gap-5">
-                        <Link href="/" className="flex items-center gap-3 group w-fit">
+                    <div className="flex flex-col gap-2">
+                        <Link href="/" className="flex items-center gap-1 group w-fit">
 
                             <div className="flex items-center justify-center w-[56px] h-[42px]">
                                 <BrandLogo
@@ -51,9 +51,9 @@ export default function Footer() {
                     <div className="flex flex-col gap-4">
                         <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">Quick Links</h4>
                         <ul className="flex flex-col gap-3 text-sm">
-                            <li><Link href="#services" className="hover:text-brand-orange transition-colors">Our Services</Link></li>
-                            <li><Link href="#portfolio" className="hover:text-brand-orange transition-colors">Portfolio Gallery</Link></li>
+                            <li><Link href="#portfolio" className="hover:text-brand-orange transition-colors">Our Services</Link></li>
                             <li><Link href="#reviews" className="hover:text-brand-orange transition-colors">Client Reviews</Link></li>
+                            <li><Link href="#pricing" className="hover:text-brand-orange transition-colors">Pricing</Link></li>
                             <li><Link href="#about" className="hover:text-brand-orange transition-colors">About the Studio</Link></li>
                         </ul>
                     </div>

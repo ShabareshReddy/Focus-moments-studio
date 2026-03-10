@@ -4,15 +4,16 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn, ChevronDown } from "lucide-react";
 
-const CATEGORIES = ["All", "Wedding", "Pre-Wedding", "Maternity", "Birthdays", "Engagement", "Reception", "Haldi", "Events", "Uncategorized"];
+const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
 
 export default function Gallery() {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState("All");
     const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
+    const [visibleCount, setVisibleCount] = useState(20);
 
     useEffect(() => {
         fetchImages();
@@ -61,7 +62,9 @@ export default function Gallery() {
     // The filtered list used for both grid AND lightbox navigation
     const filteredImages = images.filter(
         img => activeCategory === "All" || img.category === activeCategory
-    ).slice(0, 8);
+    );
+
+    const displayedImages = filteredImages.slice(0, visibleCount);
 
     const openLightbox = (index) => setLightboxIndex(index);
     const closeLightbox = () => setLightboxIndex(null);
@@ -100,20 +103,48 @@ export default function Gallery() {
         <section id="portfolio" className="py-20 bg-white min-h-screen">
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
 
-                <div className="text-center mb-12">
-                    <h2 className="text-sm font-bold tracking-widest text-brand-orange uppercase mb-3">Portfolio</h2>
-                    <h3 className="text-4xl md:text-5xl font-heading font-extrabold text-brand-dark">Our Gallery</h3>
-                </div>
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+                        }
+                    }}
+                    className="text-center mb-12"
+                >
+                    <motion.span
+                        variants={{
+                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="inline-block px-3 py-1.5 rounded bg-transparent border border-black/30 text-brand-orange text-sm font-bold tracking-[0.3em] mb-3 uppercase"
+                    >
+                        Portfolio
+                    </motion.span>
+                    <motion.h3
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-4xl md:text-5xl font-gloock font-medium text-brand-dark"
+                    >
+                        Our Gallery
+                    </motion.h3>
+                </motion.div>
 
                 {/* Category Filters */}
-                <div className="flex flex-wrap justify-center gap-1 md:gap-2 mb-12">
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-12">
                     {CATEGORIES.map((category) => (
                         <button
                             key={category}
-                            onClick={() => { setActiveCategory(category); setLightboxIndex(null); }}
-                            className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 active:scale-95 ${activeCategory === category
-                                ? "bg-brand-orange text-white shadow-lg shadow-brand-orange/20"
-                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            onClick={() => { setActiveCategory(category); setLightboxIndex(null); setVisibleCount(20); }}
+                            className={`px-6 py-2 rounded-full text-sm font-outfit font-medium transition-all duration-300 hover:scale-[1.05] active:scale-95 ${activeCategory === category
+                                ? "bg-brand-orange text-white shadow-md shadow-brand-orange/30"
+                                : "bg-gray-100 text-zinc-900 hover:bg-gray-200 hover:shadow-sm border border-black/5"
                                 }`}
                         >
                             {category}
@@ -130,38 +161,53 @@ export default function Gallery() {
                         <p className="text-brand-dark/50 text-lg">No images in the gallery yet.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
-                        <AnimatePresence>
-                            {filteredImages.map((img, index) => (
-                                <motion.div
-                                    layout
-                                    key={img.id}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.4 }}
-                                    onClick={() => openLightbox(index)}
-                                    className="relative w-full aspect-square bg-gray-100 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
-                                >
-                                    <Image
-                                        src={img.url}
-                                        alt={`Gallery Image ${img.name}`}
-                                        fill
-                                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 25vw"
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    {/* Hover overlay with zoom icon */}
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                                        <ZoomIn
-                                            className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
-                                            size={36}
-                                            strokeWidth={1.5}
+                    <>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2">
+                            <AnimatePresence>
+                                {displayedImages.map((img, index) => (
+                                    <motion.div
+                                        layout
+                                        key={img.id}
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.4 }}
+                                        onClick={() => openLightbox(index)}
+                                        className="relative w-full aspect-square bg-gray-100 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
+                                    >
+                                        <Image
+                                            src={img.url}
+                                            alt={`Gallery Image ${img.name}`}
+                                            fill
+                                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 25vw"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                    </div>
+                                        {/* Hover overlay with zoom icon */}
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                                            <ZoomIn
+                                                className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
+                                                size={36}
+                                                strokeWidth={1.5}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Load More Button */}
+                        {visibleCount < filteredImages.length && (
+                            <div className="mt-12 flex justify-center">
+                                <button
+                                    onClick={() => setVisibleCount(prev => prev + 20)}
+                                    className="flex items-center gap-2 px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold font-outfit hover:bg-amber-700 transition-colors shadow-lg shadow-brand-orange/30 group active:scale-95"
+                                >
+                                    Load More
+                                    <ChevronDown className="group-hover:translate-y-1 transition-transform" />
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 

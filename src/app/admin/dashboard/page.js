@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid, MonitorPlay, Menu, X } from "lucide-react";
+import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid, MonitorPlay, Menu, X, IndianRupee, Save } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
-const CATEGORIES = ["All", "Wedding", "Pre-Wedding", "Maternity", "Birthdays", "Engagement", "Reception", "Haldi", "Events", "Uncategorized"];
+const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
 
 export default function AdminDashboard() {
     const [images, setImages] = useState([]);
@@ -14,20 +14,89 @@ export default function AdminDashboard() {
     const [isUploading, setIsUploading] = useState(false);
     const [deletingPath, setDeletingPath] = useState(null);
     const [filterCategory, setFilterCategory] = useState("All");
-    const [uploadCategory, setUploadCategory] = useState("Wedding");
+    const [uploadCategory, setUploadCategory] = useState("Newborn Babys");
     const [activeTab, setActiveTab] = useState("gallery"); // "gallery" or "hero"
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    
+    // Pricing state
+    const [pricingPlans, setPricingPlans] = useState([]);
+    const [isSavingPricing, setIsSavingPricing] = useState(false);
+
     const fileInputRef = useRef(null);
     const router = useRouter();
 
     useEffect(() => {
-        fetchImages();
+        if (activeTab === "pricing") {
+            fetchPricingPlans();
+        } else {
+            fetchImages();
+        }
     }, [activeTab]);
 
     const handleLogout = () => {
         // Clear cookie and redirect
         document.cookie = "admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         router.push("/");
+    };
+
+    const fetchPricingPlans = async () => {
+        setIsLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from('pricing_plans')
+                .select('*')
+                .order('order', { ascending: true });
+                
+            if (error) throw error;
+            if (data) setPricingPlans(data);
+        } catch (err) {
+            console.error("Failed to fetch pricing plans:", err);
+            alert("Failed to load pricing plans. Make sure you created the 'pricing_plans' table.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePricingChange = (planIndex, field, value) => {
+        setPricingPlans(prev => prev.map((p, i) => i === planIndex ? { ...p, [field]: value } : p));
+    };
+
+    const handlePricingFeatureChange = (planIndex, featureIndex, value) => {
+        setPricingPlans(prev => prev.map((p, i) => {
+            if (i === planIndex) {
+                const newFeatures = p.features ? [...p.features] : [];
+                newFeatures[featureIndex] = value;
+                return { ...p, features: newFeatures };
+            }
+            return p;
+        }));
+    };
+
+    const savePricingPlans = async () => {
+        setIsSavingPricing(true);
+        try {
+            for (const plan of pricingPlans) {
+                const { error } = await supabase
+                    .from('pricing_plans')
+                    .update({
+                        badge: plan.badge,
+                        title: plan.title,
+                        subtitle: plan.subtitle,
+                        price: plan.price,
+                        duration: plan.duration,
+                        features: plan.features
+                    })
+                    .eq('id', plan.id);
+                    
+                if (error) throw error;
+            }
+            alert("Pricing plans successfully updated!");
+        } catch (error) {
+            console.error("Save error:", error);
+            alert(`Failed to save pricing: ${error.message}`);
+        } finally {
+            setIsSavingPricing(false);
+        }
     };
 
     const fetchImages = async () => {
@@ -189,6 +258,18 @@ export default function AdminDashboard() {
                         <MonitorPlay size={18} />
                         Hero Banners
                     </button>
+
+                    <button
+                        onClick={() => { setActiveTab("pricing"); setIsSidebarOpen(false); }}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm ${
+                            activeTab === "pricing" 
+                            ? "bg-brand-orange text-white shadow-lg shadow-brand-orange/20" 
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
+                        }`}
+                    >
+                        <IndianRupee size={18} />
+                        Pricing Plans
+                    </button>
                 </nav>
 
                 <div className="p-4 mt-auto border-t border-white/10">
@@ -210,7 +291,7 @@ export default function AdminDashboard() {
                         <Menu size={24} />
                     </button>
                     <h1 className="text-lg font-bold text-gray-900 leading-none">
-                        {activeTab === "gallery" ? "Gallery Manager" : "Hero Banners"}
+                        {activeTab === "gallery" ? "Gallery Manager" : activeTab === "hero" ? "Hero Banners" : "Pricing Plans"}
                     </h1>
                 </header>
 
@@ -220,47 +301,62 @@ export default function AdminDashboard() {
                         <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8">
                             <div className="hidden md:block">
                                 <h1 className="text-3xl font-bold text-gray-900">
-                                    {activeTab === "gallery" ? "Photo Gallery Manager" : "Hero Banner Manager"}
+                                    {activeTab === "gallery" ? "Photo Gallery Manager" : activeTab === "hero" ? "Hero Banner Manager" : "Pricing Plans Manager"}
                                 </h1>
                                 <p className="text-gray-500 mt-2">
                                     {activeTab === "gallery" 
                                         ? "Upload and manage images appearing on your portfolio grids."
-                                        : "Upload large horizontal images exactly as you want them to appear on the homepage."}
+                                        : activeTab === "hero" 
+                                        ? "Upload large horizontal images exactly as you want them to appear on the homepage."
+                                        : "Edit the prices and features for your photography packages."}
                                 </p>
                             </div>
                             
-                            <div className="flex flex-col sm:flex-row items-stretch gap-3 w-full xl:w-auto">
-                                {activeTab === "gallery" && (
-                                    <select 
-                                        value={uploadCategory}
-                                        onChange={(e) => setUploadCategory(e.target.value)}
-                                        className="px-4 py-3 rounded-lg border border-gray-300 bg-white text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none font-medium text-sm w-full sm:w-48 appearance-none shadow-sm"
-                                    >
-                                        {CATEGORIES.filter(c => c !== "All").map(cat => (
-                                            <option key={cat} value={cat}>{cat}</option>
-                                        ))}
-                                    </select>
-                                )}
-                            <input 
-                                type="file" 
-                                ref={fileInputRef}
-                                onChange={handleFileSelect}
-                                className="hidden" 
-                                accept="image/jpeg, image/png, image/webp"
-                            />
-                            <button 
-                                onClick={() => fileInputRef.current?.click()}
-                                disabled={isUploading}
-                                className="flex items-center gap-2 bg-brand-dark text-white px-6 py-3 rounded-lg hover:bg-brand-dark/90 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed font-medium w-full sm:w-auto justify-center whitespace-nowrap"
-                            >
-                                {isUploading ? <Loader2 size={18} className="animate-spin" /> : <UploadCloud size={18} />}
-                                {isUploading ? 'Uploading...' : 'Upload Photo'}
-                            </button>
+                            {activeTab !== "pricing" && (
+                                <div className="flex flex-col sm:flex-row items-stretch gap-3 w-full xl:w-auto">
+                                    {activeTab === "gallery" && (
+                                        <select 
+                                            value={uploadCategory}
+                                            onChange={(e) => setUploadCategory(e.target.value)}
+                                            className="px-4 py-3 rounded-lg border border-gray-300 bg-white text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none font-medium text-sm w-full sm:w-48 appearance-none shadow-sm"
+                                        >
+                                            {CATEGORIES.filter(c => c !== "All").map(cat => (
+                                                <option key={cat} value={cat}>{cat}</option>
+                                            ))}
+                                        </select>
+                                    )}
+                                <input 
+                                    type="file" 
+                                    ref={fileInputRef}
+                                    onChange={handleFileSelect}
+                                    className="hidden" 
+                                    accept="image/jpeg, image/png, image/webp"
+                                />
+                                <button 
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={isUploading}
+                                    className="flex items-center gap-2 bg-brand-dark text-white px-6 py-3 rounded-lg hover:bg-brand-dark/90 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed font-medium w-full sm:w-auto justify-center whitespace-nowrap"
+                                >
+                                    {isUploading ? <Loader2 size={18} className="animate-spin" /> : <UploadCloud size={18} />}
+                                    {isUploading ? 'Uploading...' : 'Upload Photo'}
+                                </button>
+                                </div>
+                            )}
+
+                            {activeTab === "pricing" && (
+                                <button
+                                    onClick={savePricingPlans}
+                                    disabled={isSavingPricing}
+                                    className="flex items-center gap-2 bg-brand-orange text-white px-8 py-3 rounded-lg hover:bg-amber-700 transition-colors shadow-md shadow-brand-orange/30 disabled:opacity-70 disabled:cursor-not-allowed font-medium w-full xl:w-auto justify-center whitespace-nowrap"
+                                >
+                                    {isSavingPricing ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                                    {isSavingPricing ? 'Saving Changes...' : 'Save Pricing Plans'}
+                                </button>
+                            )}
                         </div>
-                    </div>
 
                     {/* Filters (Gallery Only) */}
-                        {activeTab === "gallery" && (
+                    {activeTab === "gallery" && (
                             <div className="flex items-center gap-3 mb-8 pb-4 overflow-x-auto hide-scrollbar border-b border-gray-200">
                                 <div className="flex items-center gap-2 text-gray-500 font-medium text-sm pr-4 border-r border-gray-200 shrink-0">
                                     <Filter size={16} />
@@ -287,6 +383,54 @@ export default function AdminDashboard() {
                     {isLoading ? (
                         <div className="flex justify-center items-center py-32 bg-white rounded-2xl border border-gray-200 shadow-sm">
                             <Loader2 className="animate-spin text-brand-orange h-12 w-12" />
+                        </div>
+                    ) : activeTab === "pricing" ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {pricingPlans.map((plan, planIndex) => (
+                                <div key={plan.id || planIndex} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col gap-4">
+                                    <div>
+                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Badge</label>
+                                        <input type="text" value={plan.badge || ''} onChange={(e) => handlePricingChange(planIndex, 'badge', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-brand-orange outline-none" />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Title</label>
+                                        <input type="text" value={plan.title || ''} onChange={(e) => handlePricingChange(planIndex, 'title', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-bold text-gray-900 focus:ring-2 focus:ring-brand-orange outline-none" />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Subtitle</label>
+                                        <input type="text" value={plan.subtitle || ''} onChange={(e) => handlePricingChange(planIndex, 'subtitle', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 focus:ring-2 focus:ring-brand-orange outline-none" />
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="flex-1">
+                                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Price</label>
+                                            <input type="text" value={plan.price || ''} onChange={(e) => handlePricingChange(planIndex, 'price', e.target.value)} className="w-full px-3 py-2 border border-brand-orange/50 bg-orange-50 rounded-lg text-lg font-bold text-brand-orange focus:ring-2 focus:ring-brand-orange outline-none" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Duration</label>
+                                            <input type="text" value={plan.duration || ''} onChange={(e) => handlePricingChange(planIndex, 'duration', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-brand-orange outline-none" />
+                                        </div>
+                                    </div>
+                                    <div className="pt-2 border-t border-gray-100">
+                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">Features List</label>
+                                        <div className="space-y-2">
+                                            {(plan.features || []).map((feature, idx) => (
+                                                <input 
+                                                    key={idx} 
+                                                    type="text" 
+                                                    value={feature || ''} 
+                                                    onChange={(e) => handlePricingFeatureChange(planIndex, idx, e.target.value)} 
+                                                    className="w-full px-3 py-1.5 border border-gray-200 rounded text-sm text-gray-700 focus:border-brand-orange outline-none" 
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {pricingPlans.length === 0 && (
+                                <div className="col-span-full bg-orange-50 text-orange-800 p-6 rounded-xl border border-orange-200 text-center">
+                                    No pricing plans found. Please ensure you created the `pricing_plans` table and inserted the initial data.
+                                </div>
+                            )}
                         </div>
                     ) : images.length > 0 ? (
                         <div className={

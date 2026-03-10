@@ -1,7 +1,10 @@
 import Hero from "@/components/Hero";
 import Gallery from "@/components/Gallery";
 import SocialProof from "@/components/SocialProof";
+import Pricing from "@/components/Pricing";
 import About from "@/components/About";
+import Contact from "@/components/Contact";
+import FloatingContactButtons from "@/components/FloatingContactButtons";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 // Runs on the SERVER before the page is sent to the browser.
@@ -43,7 +46,10 @@ export default async function Home() {
       <Hero images={heroImages} />
       <Gallery />
       <SocialProof />
+      <Pricing />
       <About />
+      {/* <Contact /> */}
+      <FloatingContactButtons />
     </div>
   );
 }

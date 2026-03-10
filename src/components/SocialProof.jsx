@@ -32,21 +32,40 @@ export default function SocialProof() {
     return (
         <section id="reviews" className="py-24 bg-black overflow-hidden relative">
             {/* Background Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-orange/10 blur-[120px] rounded-full pointer-events-none"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-orange/10 blur-[70px] rounded-full pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16 text-center">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+                        }
+                    }}
                 >
-                    <span className="inline-block px-4 py-1.5 rounded bg-transparent border border-white/20 text-brand-orange text-xs font-semibold tracking-[0.2em] mb-6 uppercase">
-                        Hear From Our Clients
-                    </span>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
-                        We Help Capture Your <br className="hidden md:block" /> Most Precious Memories.
-                    </h2>
+                    <motion.span
+                        variants={{
+                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="inline-block px-4 py-1.5 rounded bg-transparent border border-white/20 text-brand-orange text-xs font-bold tracking-[0.2em] mb-6 uppercase"
+                    >
+                        Testimonials
+                    </motion.span>
+                    <motion.h2
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-3xl md:text-5xl lg:text-6xl font-gloock  text-white mb-6 tracking-wide"
+                    >
+                        We Help Capture Your <br className="hidden md:block" /> Most Precious{" "}
+                        <span className="text-brand-orange">Memories</span>
+                    </motion.h2>
                 </motion.div>
             </div>
 

@@ -12,6 +12,9 @@
 
   --font-inter: "Inter", sans-serif;
   --font-outfit: "Outfit", sans-serif;
+  --font-instrument: var(--font-instrument), "Georgia", serif;
+  --font-playfair: var(--font-playfair), "Georgia", serif;
+  --font-gloock: var(--font-gloock), "Georgia", serif;
 
   --font-sans: var(--font-inter);
   --font-heading: var(--font-outfit);

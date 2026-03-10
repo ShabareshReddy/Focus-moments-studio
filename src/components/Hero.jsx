@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
+
+
 // images come pre-fetched from the server via page.js (SSR)
 // No client-side Supabase call needed — images are ready on first render
 export default function Hero({ images = [] }) {
@@ -12,9 +14,9 @@ export default function Hero({ images = [] }) {
 
     // Track the very first render so we can skip the opacity-0 fade-in
     // for the initial image. Subsequent slideshow transitions still fade.
-    const isFirstRender = useRef(true);
+    const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
-        isFirstRender.current = false;
+        setIsFirstRender(false);
     }, []);
 
     // Auto-cycle slideshow every 6 seconds
@@ -37,7 +39,7 @@ export default function Hero({ images = [] }) {
                             // First image on first render: show immediately (no fade-in)
                             // All subsequent transitions: fade in normally
                             initial={
-                                isFirstRender.current && currentIndex === 0
+                                isFirstRender && currentIndex === 0
                                     ? { opacity: 1, scale: 1.08 }  // skip fade but keep zoom
                                     : { opacity: 0, scale: 1.15 }
                             }
@@ -61,39 +63,88 @@ export default function Hero({ images = [] }) {
                     )}
                 </AnimatePresence>
                 {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-brand-dark/30 to-brand-dark/20 z-10" />
+                {/* Left-side gradient so text stays readable, image peeks on right */}
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/50 to-brand-dark/10 z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/70 via-transparent to-transparent z-10" />
             </div>
 
             {/* Hero Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center pb-20 sm:pb-0 sm:mt-20">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start text-left pb-20 sm:pb-0 sm:mt-20">
                 <motion.div
-                    initial={{ opacity: 0, y: 0 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="max-w-3xl"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: {
+                                staggerChildren: 0.2, // Stagger each child by 0.2s
+                                delayChildren: 0.3    // Initial delay before staggering starts
+                            }
+                        }
+                    }}
+                    className="max-w-2xl"
                 >
-                    <span className="inline-block py-1 px-3 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs sm:text-sm font-semibold tracking-wider mb-6 uppercase">
-                        Tirupati's Premier Photo Studio
-                    </span>
-                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-helvetica font-bold text-white mb-6 leading-tight drop-shadow-lg">
-                        Capturing Life's <br className="hidden sm:block" />
-                        <span className="text-brand-orange">Most Precious</span> Moments
-                    </h1>
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                    >
+                        <span className="inline-block py-1 px-3 rounded-2xl bg-white/20 backdrop-blur-sm text-white border border-white/10 text-xs sm:text-sm font-outfit tracking-wider mb-4 uppercase">
+                            Tirupati&apos;s Premier Photo Studio
+                        </span>
+                    </motion.div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <motion.h1
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-4xl sm:text-7xl md:text-7xl font-gloock text-white mb-5 leading-tighter drop-shadow-lg"
+                    >
+                        Capturing Life&apos;s <br className="hidden sm:block" />
+                        <span className="text-brand-orange font-medium">Most Precious</span> Moments ~
+                    </motion.h1>
+
+                    <motion.p
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-base sm:text-lg md:text-xl text-white/80 mb-8 font-outfit font-normal max-w-lg leading-relaxed"
+                    >
+                        We capture the essence of your moments, preserving them for generations to come.
+                    </motion.p>
+
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, y: 30, filter: "blur(5px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="flex sm:flex-row items-stretch sm:items-center justify-start gap-4 w-full sm:w-auto"
+                    >
                         <Link
                             href="#portfolio"
-                            className="w-full sm:w-auto px-8 py-4 bg-brand-orange text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-orange active:scale-95 transition-all duration-150 shadow-lg"
+                            className="w-full sm:w-auto text-center px-8 py-3.5 bg-brand-orange text-white rounded-full 
+                            font-outfit font-semibold text-base tracking-wide flex items-center justify-center
+                            hover:bg-amber-700 hover:scale-[1.03] 
+                            active:scale-95 transition-all duration-200 shadow-lg shadow-brand-orange/40 gap-2"
                         >
                             View Our Work
                         </Link>
+
                         <Link
                             href="tel:+918328191729"
-                            className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white border-2 border-white/50 rounded-full font-semibold text-lg hover:bg-white hover:text-brand-dark active:scale-95 transition-all duration-150"
+                            className="w-full sm:w-auto text-center px-8 py-3.5 flex items-center justify-center
+                            bg-white/10 backdrop-blur-md text-white border border-white/30 rounded-full 
+                            font-outfit font-semibold text-base tracking-wide 
+                            hover:bg-white hover:text-brand-dark hover:scale-[1.03]
+                            active:scale-95 transition-all duration-200 gap-2"
                         >
                             Book a Session
                         </Link>
-                    </div>
+                    </motion.div>
                 </motion.div>
             </div>
 

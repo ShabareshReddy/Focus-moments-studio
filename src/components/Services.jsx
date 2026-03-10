@@ -36,13 +36,47 @@ export default function Services() {
     return (
         <section id="services" className="py-24 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-sm font-bold tracking-widest text-brand-orange uppercase mb-3">Our Expertise</h2>
-                    <h3 className="text-4xl md:text-5xl font-heading font-extrabold text-brand-dark">Photography Services</h3>
-                    <p className="mt-4 text-brand-dark/70 max-w-2xl mx-auto text-lg">
-                        From your baby's first steps to grand family celebrations, we capture the essence of your most important milestones.
-                    </p>
-                </div>
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+                        }
+                    }}
+                    className="text-center mb-16"
+                >
+                    <motion.h2
+                        variants={{
+                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-sm font-bold tracking-widest text-brand-orange uppercase mb-3"
+                    >
+                        Our Expertise
+                    </motion.h2>
+                    <motion.h3
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-4xl md:text-5xl font-heading font-extrabold text-brand-dark"
+                    >
+                        Photography Services
+                    </motion.h3>
+                    <motion.p
+                        variants={{
+                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="mt-4 text-brand-dark/70 max-w-2xl mx-auto text-lg"
+                    >
+                        From your baby&apos;s first steps to grand family celebrations, we capture the essence of your most important milestones.
+                    </motion.p>
+                </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
                     {serviceCategories.map((category, idx) => (

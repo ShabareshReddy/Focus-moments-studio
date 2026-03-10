@@ -14,7 +14,7 @@ const stats = [
 const highlights = [
     "Professional, patient handling of newborns & babies",
     "Clean studio environment with engaging props",
-    "Locally trusted with a 5.0 ★ Google Rating",
+    "Locally trusted with a 4+★ Google Rating",
     "Creative direction personally by Tulasi Prasad",
 ];
 
@@ -25,16 +25,27 @@ export default function About() {
 
                 {/* Section Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+                        }
+                    }}
                     className="text-center mb-16"
                 >
-                    <span className="px-4 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-lg font-bold tracking-[0.2em] uppercase mb-4">
-                        About The Studio
-                    </span>
-
+                    <motion.h3
+                        variants={{
+                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="text-4xl md:text-5xl font-gloock font-medium text-brand-dark"
+                    >
+                        About Us ~
+                    </motion.h3>
                 </motion.div>
 
 
@@ -71,15 +82,18 @@ export default function About() {
                         transition={{ duration: 0.8 }}
                         className="w-full lg:w-7/12"
                     >
-                        <h3 className="text-3xl md:text-4xl font-heading font-extrabold text-brand-dark mb-5 leading-tight">
+                        <h3 className="text-3xl md:text-4xl font-gloock font-large text-brand-dark mb-5 leading-tight">
                             Crafting Your Story With{" "}
                             <span className="text-brand-orange">Patience & Care</span>
                         </h3>
-                        <p className="text-brand-zinc text-lg leading-relaxed mb-4">
+                        <p className="text-brand-zinc font-outfit  text-lg leading-relaxed mb-4">
                             At <strong>Focus Moments Studio</strong>, led by <strong>Tulasi Prasad</strong>, we believe photography is more than just taking pictures — it's about capturing the raw, unscripted emotions that make your story unique.
                         </p>
-                        <p className="text-brand-zinc text-lg leading-relaxed mb-8">
-                            Located in the heart of <strong>Tirupati</strong>, our fully-equipped studio is designed to create a calm, comfortable space — especially important for baby, newborn, and family sessions. Every session is handled with exceptional patience and creative care.
+                        <p className="text-brand-zinc font-outfit  text-lg leading-relaxed mb-8">
+                            Located in the heart of <strong>Tirupati</strong>, We specialize in capturing authentic and heartfelt moments, whether it’s
+                            a wedding celebration, a family portrait, or a special milestone. Our goal
+                            is to create images that allow you to relive your most important memories
+                            for years to come.
                         </p>
 
                         <ul className="space-y-3 mb-10">
@@ -90,7 +104,7 @@ export default function About() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.4, delay: idx * 0.1 }}
-                                    className="flex items-start gap-3"
+                                    className="flex font-outfit items-start gap-3"
                                 >
                                     <CheckCircle2 className="text-brand-orange shrink-0 mt-0.5" size={22} />
                                     <span className="text-brand-dark font-medium text-base">{item}</span>
@@ -98,22 +112,7 @@ export default function About() {
                             ))}
                         </ul>
 
-                        <div className="flex flex-wrap gap-4">
-                            <a
-                                href="tel:+918328191729"
-                                className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold text-base hover:bg-brand-dark active:scale-95 transition-all duration-150 shadow-lg shadow-brand-orange/30"
-                            >
-                                📞 Call Us Now
-                            </a>
-                            <a
-                                href="https://www.instagram.com/focus_momentsstudio/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-8 py-3.5 border-2 border-brand-dark text-brand-dark rounded-full font-semibold text-base hover:bg-brand-dark hover:text-white active:scale-95 transition-all duration-150"
-                            >
-                                📷 Our Instagram
-                            </a>
-                        </div>
+
                     </motion.div>
                 </div>
 
