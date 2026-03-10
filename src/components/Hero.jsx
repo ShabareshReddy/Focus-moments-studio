@@ -129,7 +129,7 @@ export default function Hero({ images = [] }) {
                             className="w-full sm:w-auto text-center px-8 py-3.5 bg-brand-orange text-white rounded-full 
                             font-outfit font-semibold text-base tracking-wide flex items-center justify-center
                             hover:bg-amber-700 hover:scale-[1.03] 
-                            active:scale-95 transition-all duration-200 shadow-lg shadow-brand-orange/40 gap-2"
+                            active:scale-95 transition-all duration-200  gap-2"
                         >
                             View Our Work
                         </Link>

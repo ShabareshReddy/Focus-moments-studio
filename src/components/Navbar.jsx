@@ -112,11 +112,11 @@ export default function Navbar() {
                             )}
                         </div>
                     ))}
-                    <div className="w-full px-6 mt-4">
+                    <div className="w-full px-9 mt-4">
                         <a
                             href="tel:+918328191729"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block w-full text-center bg-brand-orange text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-brand-orange active:scale-95 active:opacity-80 transition-all duration-150 shadow-lg shadow-brand-orange/30"
+                            className="block w-full text-center bg-brand-orange text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-brand-orange active:scale-95 active:opacity-80 transition-all duration-150"
                         >
                             📞 Call Now: +91 8328191729
                         </a>
