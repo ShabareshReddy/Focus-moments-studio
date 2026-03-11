@@ -29,7 +29,7 @@ export default function Hero({ images = [] }) {
     }, [images]);
 
     return (
-        <section className="relative h-screen min-h-[600px] flex items-end sm:items-center justify-center overflow-hidden bg-brand-dark">
+        <section className="relative h-screen min-h-[600px] flex items-end justify-center overflow-hidden bg-brand-dark">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="popLayout">
@@ -46,7 +46,7 @@ export default function Hero({ images = [] }) {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{
-                                opacity: { duration: 0.8, ease: "easeInOut" },
+                                opacity: { duration: 0.9, ease: "easeInOut" },
                                 scale: { duration: 7, ease: "linear" },
                             }}
                             className="absolute inset-0"
@@ -63,13 +63,11 @@ export default function Hero({ images = [] }) {
                     )}
                 </AnimatePresence>
                 {/* Dark overlay */}
-                {/* Left-side gradient so text stays readable, image peeks on right */}
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/50 to-brand-dark/10 z-10" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/70 via-transparent to-transparent z-10" />
             </div>
 
             {/* Hero Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start text-left pb-20 sm:pb-0 sm:mt-20">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start text-left  pb-24 sm:pb-32 sm:mt-20">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -91,8 +89,8 @@ export default function Hero({ images = [] }) {
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
                     >
-                        <span className="inline-block py-1 px-3 rounded-2xl bg-white/20 backdrop-blur-sm text-white border border-white/10 text-xs sm:text-sm font-outfit tracking-wider mb-4 uppercase">
-                            Tirupati&apos;s Premier Photo Studio
+                        <span className="inline-block py-1 px-3 text-white border border-white/10 text-xs sm:text-sm font-space-grotesk tracking-[0.3em] leading-relaxed mb-2 uppercase">
+                            FOCUS MOMENTS STUDIO
                         </span>
                     </motion.div>
 
@@ -101,7 +99,7 @@ export default function Hero({ images = [] }) {
                             hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-4xl sm:text-7xl md:text-7xl font-gloock text-white mb-5 leading-tighter drop-shadow-lg"
+                        className="text-4xl sm:text-7xl md:text-7xl font-instrument italic text-white mb-5 leading-tighter tracking-tight drop-shadow-lg"
                     >
                         Capturing Life&apos;s <br className="hidden sm:block" />
                         <span className="text-brand-orange font-medium">Most Precious</span> Moments ~
@@ -112,7 +110,7 @@ export default function Hero({ images = [] }) {
                             hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-base sm:text-lg md:text-xl text-white/80 mb-8 font-outfit font-normal max-w-lg leading-relaxed"
+                        className="text-base sm:text-lg md:text-xl text-white/80 mb-8 font-space-grotesk font-normal max-w-lg leading-relaxed"
                     >
                         We capture the essence of your moments, preserving them for generations to come.
                     </motion.p>
@@ -126,23 +124,23 @@ export default function Hero({ images = [] }) {
                     >
                         <Link
                             href="#portfolio"
-                            className="w-full sm:w-auto text-center px-8 py-3.5 bg-brand-orange text-white rounded-full 
-                            font-outfit font-semibold text-base tracking-wide flex items-center justify-center
+                            className="w-full sm:w-auto text-center px-4 py-2 bg-brand-orange text-white rounded-sm 
+                            font-space-grotesk font-semibold text-base tracking-wide flex items-center justify-center
                             hover:bg-amber-700 hover:scale-[1.03] 
-                            active:scale-95 transition-all duration-200  gap-2"
+                            active:scale-95 transition-all duration-200 gap-2"
                         >
                             View Our Work
                         </Link>
 
                         <Link
                             href="tel:+918328191729"
-                            className="w-full sm:w-auto text-center px-8 py-3.5 flex items-center justify-center
-                            bg-white/10 backdrop-blur-md text-white border border-white/30 rounded-full 
-                            font-outfit font-semibold text-base tracking-wide 
-                            hover:bg-white hover:text-brand-dark hover:scale-[1.03]
-                            active:scale-95 transition-all duration-200 gap-2"
+                            className="w-full sm:w-auto text-center px-4 py-2 flex items-center justify-center
+                            bg-white/10 backdrop-blur-md text-white border border-white/30 rounded-sm 
+                            font-space-grotesk font-semibold text-base tracking-wide 
+                            hover:bg-white/20 hover:text-white hover:scale-[1.03]
+                            active:scale-95 transition-all duration-100 gap-2"
                         >
-                            Book a Session
+                            Get in Touch
                         </Link>
                     </motion.div>
                 </motion.div>

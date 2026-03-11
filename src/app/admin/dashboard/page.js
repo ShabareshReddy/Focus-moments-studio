@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid, MonitorPlay, Menu, X, IndianRupee, Save } from "lucide-react";
+import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid, MonitorPlay, Menu, X, IndianRupee, Save, ChevronDown } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
+const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models", "Birthdays", "Maternity"];
 
 export default function AdminDashboard() {
     const [images, setImages] = useState([]);
@@ -101,7 +102,7 @@ export default function AdminDashboard() {
 
     const fetchImages = async () => {
         setIsLoading(true);
-        const folderName = activeTab === "hero" ? "hero" : "uploads";
+        const folderName = activeTab === "hero" ? "hero" : activeTab === "services" ? "services" : "uploads";
         try {
              const { data, error } = await supabase.storage
                 .from('gallery-images')
@@ -155,7 +156,7 @@ export default function AdminDashboard() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('category', activeTab === "hero" ? "Hero" : uploadCategory);
-        formData.append('folder', activeTab === "hero" ? "hero" : "uploads");
+        formData.append('folder', activeTab === "hero" ? "hero" : activeTab === "services" ? "services" : "uploads");
 
         try {
             const res = await fetch('/api/gallery/upload', {
@@ -237,9 +238,9 @@ export default function AdminDashboard() {
                 <nav className="flex-1 px-4 py-6 space-y-2">
                     <button
                         onClick={() => { setActiveTab("gallery"); setIsSidebarOpen(false); }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm ${
+                        className={`w-full flex items-center gap-3 px-4 py-3 transition-all font-space-grotesk text-md ${
                             activeTab === "gallery" 
-                            ? "bg-brand-orange text-white shadow-lg shadow-brand-orange/20" 
+                            ? "bg-brand-orange text-white " 
                             : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                     >
@@ -249,9 +250,9 @@ export default function AdminDashboard() {
 
                     <button
                         onClick={() => { setActiveTab("hero"); setIsSidebarOpen(false); }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm ${
+                        className={`w-full flex items-center gap-3 px-4 py-3  transition-all font-space-grotesk text-md ${
                             activeTab === "hero" 
-                            ? "bg-brand-orange text-white shadow-lg shadow-brand-orange/20" 
+                            ? "bg-brand-orange text-white " 
                             : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                     >
@@ -260,10 +261,22 @@ export default function AdminDashboard() {
                     </button>
 
                     <button
-                        onClick={() => { setActiveTab("pricing"); setIsSidebarOpen(false); }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-sm ${
-                            activeTab === "pricing" 
+                        onClick={() => { setActiveTab("services"); setIsSidebarOpen(false); }}
+                        className={`w-full flex items-center gap-3 px-4 py-3  transition-all font-space-grotesk text-md ${
+                            activeTab === "services" 
                             ? "bg-brand-orange text-white shadow-lg shadow-brand-orange/20" 
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
+                        }`}
+                    >
+                        <ImageIcon size={18} />
+                        Services Categories
+                    </button>
+
+                    <button
+                        onClick={() => { setActiveTab("pricing"); setIsSidebarOpen(false); }}
+                        className={`w-full flex items-center gap-3 px-4 py-3  transition-all font-space-grotesk text-md ${
+                            activeTab === "pricing" 
+                            ? "bg-brand-orange text-white " 
                             : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                     >
@@ -275,7 +288,7 @@ export default function AdminDashboard() {
                 <div className="p-4 mt-auto border-t border-white/10">
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors text-sm font-medium"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-red-400 hover:bg-red-400/10  transition-colors text-md font-space-grotesk"
                     >
                         <LogOut size={16} />
                         Logout Session
@@ -291,7 +304,7 @@ export default function AdminDashboard() {
                         <Menu size={24} />
                     </button>
                     <h1 className="text-lg font-bold text-gray-900 leading-none">
-                        {activeTab === "gallery" ? "Gallery Manager" : activeTab === "hero" ? "Hero Banners" : "Pricing Plans"}
+                        {activeTab === "gallery" ? "Gallery Manager" : activeTab === "hero" ? "Hero Banners" : activeTab === "services" ? "Services Slider" : "Pricing Plans"}
                     </h1>
                 </header>
 
@@ -300,30 +313,37 @@ export default function AdminDashboard() {
                         {/* Page Header */}
                         <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8">
                             <div className="hidden md:block">
-                                <h1 className="text-3xl font-bold text-gray-900">
-                                    {activeTab === "gallery" ? "Photo Gallery Manager" : activeTab === "hero" ? "Hero Banner Manager" : "Pricing Plans Manager"}
+                                <h1 className="text-3xl font-faculty-glyphic text-gray-900">
+                                    {activeTab === "gallery" ? "Photo Gallery Manager" : activeTab === "hero" ? "Hero Banner Manager" : activeTab === "services" ? "Services Image Manager" : "Pricing Plans Manager"}
                                 </h1>
-                                <p className="text-gray-500 mt-2">
+                                <p className="text-gray-500 font-space-grotesk mt-2">
                                     {activeTab === "gallery" 
                                         ? "Upload and manage images appearing on your portfolio grids."
                                         : activeTab === "hero" 
                                         ? "Upload large horizontal images exactly as you want them to appear on the homepage."
+                                        : activeTab === "services"
+                                        ? "Upload category images for the Services horizontal slider."
                                         : "Edit the prices and features for your photography packages."}
                                 </p>
                             </div>
                             
                             {activeTab !== "pricing" && (
                                 <div className="flex flex-col sm:flex-row items-stretch gap-3 w-full xl:w-auto">
-                                    {activeTab === "gallery" && (
-                                        <select 
-                                            value={uploadCategory}
-                                            onChange={(e) => setUploadCategory(e.target.value)}
-                                            className="px-4 py-3 rounded-lg border border-gray-300 bg-white text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none font-medium text-sm w-full sm:w-48 appearance-none shadow-sm"
-                                        >
-                                            {CATEGORIES.filter(c => c !== "All").map(cat => (
-                                                <option key={cat} value={cat}>{cat}</option>
-                                            ))}
-                                        </select>
+                                    {(activeTab === "gallery" || activeTab === "services") && (
+                                        <div className="relative w-full sm:w-48">
+                                            <select 
+                                                value={uploadCategory}
+                                                onChange={(e) => setUploadCategory(e.target.value)}
+                                                className="px-4 py-3 pr-10 border border-gray-300 bg-white cursor-pointer text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none font-space-grotesk font-medium text-md w-full appearance-none shadow-sm rounded-lg hover:border-brand-orange transition-colors"
+                                            >
+                                                {(activeTab === "gallery" ? CATEGORIES.filter(c => c !== "All") : SERVICES_CATEGORIES).map(cat => (
+                                                    <option key={cat} value={cat}>{cat}</option>
+                                                ))}
+                                            </select>
+                                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500">
+                                                <ChevronDown size={18} />
+                                            </div>
+                                        </div>
                                     )}
                                 <input 
                                     type="file" 
@@ -335,7 +355,7 @@ export default function AdminDashboard() {
                                 <button 
                                     onClick={() => fileInputRef.current?.click()}
                                     disabled={isUploading}
-                                    className="flex items-center gap-2 bg-brand-dark text-white px-6 py-3 rounded-lg hover:bg-brand-dark/90 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed font-medium w-full sm:w-auto justify-center whitespace-nowrap"
+                                    className="flex items-center gap-2 bg-brand-dark text-white px-6 py-3 rounded-lg hover:bg-brand-orange cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-brand-dark disabled:hover:shadow-sm disabled:cursor-not-allowed font-medium w-full sm:w-auto justify-center whitespace-nowrap"
                                 >
                                     {isUploading ? <Loader2 size={18} className="animate-spin" /> : <UploadCloud size={18} />}
                                     {isUploading ? 'Uploading...' : 'Upload Photo'}
@@ -357,8 +377,8 @@ export default function AdminDashboard() {
 
                     {/* Filters (Gallery Only) */}
                     {activeTab === "gallery" && (
-                            <div className="flex items-center gap-3 mb-8 pb-4 overflow-x-auto hide-scrollbar border-b border-gray-200">
-                                <div className="flex items-center gap-2 text-gray-500 font-medium text-sm pr-4 border-r border-gray-200 shrink-0">
+                            <div className="flex items-center font-space-grotesk gap-3 mb-8 pb-4 overflow-x-auto hide-scrollbar border-b border-gray-200">
+                                <div className="flex items-center gap-2 text-gray-500 font-medium text-lg pr-4 border-r border-gray-200 shrink-0">
                                     <Filter size={16} />
                                     Categories
                                 </div>
@@ -433,15 +453,11 @@ export default function AdminDashboard() {
                             )}
                         </div>
                     ) : images.length > 0 ? (
-                        <div className={
-                            activeTab === "gallery" 
-                            ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"
-                            : "grid grid-cols-1 sm:grid-cols-2 gap-6"
-                        }>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
                             {images
-                                .filter(img => activeTab === "hero" || filterCategory === "All" || img.category === filterCategory)
+                                .filter(img => activeTab === "hero" || activeTab === "services" || filterCategory === "All" || img.category === filterCategory)
                                 .map((img) => (
-                                <div key={img.id} className={`group relative rounded-xl overflow-hidden bg-gray-200 border border-gray-200 shadow-sm ${activeTab === 'hero' ? 'aspect-video' : 'aspect-square'}`}>
+                                <div key={img.id} className="group relative overflow-hidden bg-gray-200 border border-gray-200 shadow-sm aspect-square">
                                     <Image 
                                         src={img.url}
                                         alt={img.name}

@@ -94,7 +94,7 @@ export default function Pricing() {
     return (
         <section id="pricing" className="py-20 bg-[#080808] overflow-hidden relative">
             {/* Background glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-brand-orange/8 blur-[130px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-brand-orange/5 blur-[130px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -126,9 +126,9 @@ export default function Pricing() {
                             hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-4xl md:text-5xl lg:text-6xl font-gloock text-white leading-relaxed"
+                        className="text-4xl md:text-5xl lg:text-6xl font-instrument italic text-white tracking-wide leading-relaxed"
                     >
-                        Simple, Transparent{" "}
+                        Simple & Transparent{" "}
                         <span className="text-brand-orange">Packages</span>
                     </motion.h2>
                     <motion.p
@@ -136,9 +136,9 @@ export default function Pricing() {
                             hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="mt-4 font-outfit text-white/50 text-base md:text-lg max-w-xl mx-auto"
+                        className="mt-3 font-space-grotesk text-white/40 text-base md:text-lg max-w-xl mx-auto"
                     >
-                        No hidden charges. Choose your package and let us handle the rest.
+                        Flexible photography packages for newborn shoots, baby milestones, weddings, and family celebrations in Tirupati.
                     </motion.p>
                 </motion.div>
 
@@ -153,30 +153,29 @@ export default function Pricing() {
                             transition={{ duration: 0.5, delay: i * 0.12 }}
                             className={`snap-center shrink-0 w-[82vw] sm:w-[340px] md:w-auto relative flex flex-col rounded-3xl overflow-hidden
                                 ${plan.highlight
-                                    ? "bg-gradient-to-b from-brand-orange/20 to-[#0f0f0f] border-2 border-brand-orange shadow-2xl shadow-brand-orange/20 scale-[1.02] md:scale-105"
-                                    : "bg-[#0A0A0A] border border-white/8"
+                                    ? " border-2 border-brand-orange/80 scale-[1.02] md:scale-105"
+                                    : "border border-white/8"
                                 }`}
                         >
                             {/* Popular badge */}
-                            {plan.highlight && (
+                            {/* {plan.highlight && (
                                 <div className="absolute top-4 right-4 flex bg-brand-orange items-center gap-1 px-3 py-1 rounded-full  text-white text-[11px] font-bold tracking-wide">
                                     <Star size={11} className="fill-white" /> Most Popular
                                 </div>
-                            )}
+                            )} */}
 
                             <div className="p-6 flex flex-col flex-1">
                                 {/* Badge + title */}
-                                <span className="text-sm font-semibold text-white/60 mb-1">{plan.badge}</span>
-                                <h3 className="text-xl md:text-2xl font-heading font-bold text-white mb-1">{plan.title}</h3>
-                                <p className="text-white/40 text-sm mb-4">{plan.subtitle}</p>
+                                <h3 className="text-xl md:text-2xl font-gloock font-medium text-white mb-1 tracking-wide">{plan.title}</h3>
+                                <p className="text-white/60 font-space-grotesk text-sm mb-4">{plan.subtitle}</p>
 
                                 {/* Price */}
                                 <div className="flex items-end gap-2 mb-1">
-                                    <span className={`text-4xl md:text-5xl font-extrabold font-heading ${plan.highlight ? "text-brand-orange" : "text-white"}`}>
+                                    <span className={`text-4xl md:text-5xl font-bold font-space-grotesk tracking-tight ${plan.highlight ? "text-brand-orange" : "text-white"}`}>
                                         {plan.price}
                                     </span>
                                 </div>
-                                <span className="text-white/40 text-sm mb-5">{plan.duration}</span>
+                                <span className="text-white/50 font-space-grotesk text-md mb-5">{plan.duration}</span>
 
                                 {/* Divider */}
                                 <div className="w-full h-px bg-white/8 mb-5" />
@@ -184,7 +183,7 @@ export default function Pricing() {
                                 {/* Features */}
                                 <ul className="space-y-2.5 mb-6 flex-1">
                                     {plan.features.map((f) => (
-                                        <li key={f} className="flex items-start gap-3 text-white/75 text-sm">
+                                        <li key={f} className="flex items-start gap-3 text-white/80 font-space-grotesk text-sm">
                                             <span className={`mt-0.5 shrink-0 w-5 h-5 rounded-full flex items-center justify-center
                                                 ${plan.highlight ? "bg-brand-orange/20 text-brand-orange" : "bg-white/10 text-white/60"}`}>
                                                 <Check size={12} strokeWidth={3} />
@@ -199,17 +198,18 @@ export default function Pricing() {
                                     href="tel:+918328191729"
                                     className={`flex items-center justify-center gap-2 w-full py-3 rounded-full font-semibold text-base transition-all duration-200 active:scale-95
                                         ${plan.highlight
-                                            ? "bg-brand-orange text-white hover:bg-white hover:text-brand-orange shadow-lg shadow-brand-orange/30"
+                                            ? "bg-brand-orange text-white hover:bg-white hover:text-brand-orange "
                                             : "bg-white/8 text-white hover:bg-white/15 border border-white/12"
                                         }`}
                                 >
                                     <Phone size={16} />
-                                    Book This Package
+                                    Book This Shoot
                                 </a>
                             </div>
                         </motion.div>
                     ))}
                 </div>
+                <p className=" justify-center mx-auto items-center ">All packages can be customized based on your requirements.</p>
 
 
             </div>

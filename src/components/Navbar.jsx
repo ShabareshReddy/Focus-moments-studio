@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Camera, Menu, X } from "lucide-react";
+import { Camera, Menu, X, ArrowUpRight } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 
 export default function Navbar() {
@@ -19,6 +19,7 @@ export default function Navbar() {
 
     const navLinks = [
         { name: "Home", href: "/" },
+        { name: "Services", href: "#services" },
         { name: "Portfolio", href: "#portfolio" },
         { name: "Reviews", href: "#reviews" },
         { name: "About", href: "#about" },
@@ -29,31 +30,31 @@ export default function Navbar() {
     return (
         <nav
             className={`fixed top-0 w-full z-50 transition-all duration-300 ${isSolid
-                ? "bg-white/80 backdrop-blur-md shadow-sm py-1.5"
-                : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-xs py-2"
+                ? "bg-white/80 backdrop-blur-xs shadow-sm py-1.5"
+                : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-xs py-1"
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-3">
+                <div className="flex  justify-between items-center">
                     {/* Logo: SVG icon + stacked text side by side */}
                     <Link href="/" className="flex items-center">
 
                         <div className="flex items-center justify-center w-[50px] h-[50px]">
                             <BrandLogo
-                                className="w-full h-full scale-[1.6] origin-center transition-transform duration-200 group-hover:scale-[1.7]"
+                                className="w-full h-full scale-[1.9] origin-center transition-transform duration-200 group-hover:scale-[1.9]"
                                 variant={isSolid ? "colored" : "colored"}
                             />
                         </div>
 
-                        <div className="flex font-heading flex-col justify-center tracking-tighter">
+                        <div className="flex font-space-grotesk flex-col justify-center tracking-tighter">
                             <span
-                                className={` font-extrabold text-[18px] tracking-wide ${isSolid ? "text-brand-dark" : "text-white"
+                                className={` font-extrabold text-[18px] tracking-wide ${isSolid ? "text-brand-dark" : "text-white font-extrabold"
                                     }`}
                             >
                                 FOCUS MOMENTS
                             </span>
 
-                            <span className="text-[14px] font-bold leading-[0.8em] tracking-[0.10em] text-brand-orange">
+                            <span className="text-[14px] font-space-grotesk font-extrabold leading-[0.6em] tracking-widest text-brand-orange">
                                 STUDIO
                             </span>
                         </div>
@@ -67,7 +68,7 @@ export default function Navbar() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className={`text-lg font-outfit font-large transition-colors
+                                    className={`text-lg font-space-grotesk font-medium transition-colors
                                          hover:text-brand-orange active:opacity-60 ${isSolid ? "text-brand-dark font-medium" : "text-white"
                                         }`}
                                 >
@@ -77,9 +78,9 @@ export default function Navbar() {
                         </div>
                         <a
                             href="tel:+918328191729"
-                            className="bg-brand-orange text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amber-700  active:scale-95  transition-all duration-150 shadow-lg shadow-brand-orange/40"
+                            className="bg-brand-orange/90 text-white px-3.5 py-1.5 rounded-sm text-sm font-space-grotesk font-medium hover:bg-amber-700  active:scale-95  transition-all duration-150 "
                         >
-                            Book Session
+                            Contact Us
                         </a>
                     </div>
 
@@ -97,13 +98,13 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-brand-dark/95 backdrop-blur-xl border-t border-white/10 shadow-2xl py-6 flex flex-col items-center gap-1">
+                <div className="md:hidden absolute top-full w-full bg-brand-dark border-t border-white/10 shadow-2xl py-6 flex flex-col items-center gap-1">
                     {navLinks.map((link, i) => (
-                        <div key={link.name} className="w-full">
+                        <div key={link.name} className="w-2/3">
                             <Link
                                 href={link.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="block w-full text-center py-4 text-lg font-semibold text-white/90 hover:text-brand-orange active:text-brand-orange active:scale-95 transition-all duration-150 tracking-wide"
+                                className="block w-full text-center font-outfit py-4 text-lg font-large text-white/90 hover:text-brand-orange active:text-brand-orange active:scale-95 transition-all duration-150 tracking-wide"
                             >
                                 {link.name}
                             </Link>

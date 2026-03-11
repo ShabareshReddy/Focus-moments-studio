@@ -36,7 +36,7 @@ export default function Contact() {
                             hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-4xl md:text-5xl font-gloock font-medium text-brand-dark mb-4"
+                        className="text-4xl md:text-5xl font-instrument italic font-medium text-brand-dark mb-4"
                     >
                         Let&apos;s Create Magic <span className="text-brand-orange">Together</span>
                     </motion.h3>
@@ -45,7 +45,7 @@ export default function Contact() {
                             hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-brand-zinc text-lg max-w-2xl mx-auto font-outfit"
+                        className="text-brand-zinc text-lg max-w-2xl mx-auto font-space-grotesk"
                     >
                         Have a question or ready to book a session? Fill out the form below or visit our studio in Tirupati.
                     </motion.p>
@@ -61,7 +61,7 @@ export default function Contact() {
                         transition={{ duration: 0.8 }}
                         className="w-full lg:w-1/2 bg-white rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5"
                     >
-                        <h4 className="text-2xl font-heading font-bold text-brand-dark mb-6">Send us a message</h4>
+                        <h4 className="text-2xl font-instrument italic font-bold text-brand-dark mb-6">Send us a message</h4>
 
                         <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -112,7 +112,7 @@ export default function Contact() {
 
                             <button
                                 type="submit"
-                                className="w-full mt-2 flex items-center justify-center gap-2 group px-8 py-4 bg-brand-orange text-white rounded-xl font-outfit font-semibold text-base tracking-wide hover:bg-amber-700 hover:scale-[1.02] active:scale-95 transition-all duration-200 shadow-sm shadow-brand-orange/40"
+                                className="w-full mt-2 flex items-center justify-center gap-2 group px-8 py-4 bg-brand-orange text-white rounded-xl font-space-grotesk font-semibold text-base tracking-wide hover:bg-amber-700 hover:scale-[1.02] active:scale-95 transition-all duration-200 shadow-sm shadow-brand-orange/40"
                             >
                                 Send Message
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />

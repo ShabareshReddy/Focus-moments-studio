@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
@@ -8,16 +9,23 @@ import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn, ChevronDown } from "luci
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
 
-export default function Gallery() {
+function GalleryContent() {
+    const searchParams = useSearchParams();
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState("All");
     const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
     const [visibleCount, setVisibleCount] = useState(20);
 
+    // Initial load and URL param parsing
     useEffect(() => {
         fetchImages();
-    }, []);
+
+        const categoryParam = searchParams.get("category");
+        if (categoryParam && CATEGORIES.includes(categoryParam)) {
+            setActiveCategory(categoryParam);
+        }
+    }, [searchParams]);
 
     const fetchImages = async () => {
         try {
@@ -101,7 +109,7 @@ export default function Gallery() {
 
     return (
         <section id="portfolio" className="py-20 bg-white min-h-screen">
-            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[1400px] w-full lg:w-[95%] xl:w-[85%] mx-auto px-4 sm:px-6 lg:px-8">
 
                 <motion.div
                     initial="hidden"
@@ -121,7 +129,7 @@ export default function Gallery() {
                             hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="inline-block px-3 py-1.5 rounded bg-transparent border border-black/30 text-brand-orange text-sm font-bold tracking-[0.3em] mb-3 uppercase"
+                        className="inline-block px-3 py-1 rounded-sm bg-transparent border border-black/30 text-brand-orange text-sm font-bold tracking-[0.3em] mb-3 uppercase"
                     >
                         Portfolio
                     </motion.span>
@@ -130,7 +138,7 @@ export default function Gallery() {
                             hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-4xl md:text-5xl font-gloock font-medium text-brand-dark"
+                        className="text-3xl md:text-5xl font-instrument italic font-medium tracking-wide text-brand-dark"
                     >
                         Our Gallery
                     </motion.h3>
@@ -158,7 +166,7 @@ export default function Gallery() {
                             }}
                             key={category}
                             onClick={() => { setActiveCategory(category); setLightboxIndex(null); setVisibleCount(20); }}
-                            className={`px-6 py-2 rounded-full text-sm font-outfit font-medium transition-all duration-300 hover:scale-[1.05] active:scale-95 ${activeCategory === category
+                            className={`px-6 py-2 rounded-full text-sm font-space-grotesk transition-all duration-300 hover:scale-[1.05] active:scale-95 ${activeCategory === category
                                 ? "bg-brand-orange text-white shadow-md shadow-brand-orange/30"
                                 : "bg-gray-100 text-zinc-900 hover:bg-gray-200 hover:shadow-sm border border-black/5"
                                 }`}
@@ -174,11 +182,11 @@ export default function Gallery() {
                     </div>
                 ) : images.length === 0 ? (
                     <div className="text-center py-20">
-                        <p className="text-brand-dark/50 text-lg">No images in the gallery yet.</p>
+                        <p className="text-brand-dark/50 font-space-grotesk text-lg">No images in the gallery yet.</p>
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 w-full">
                             <AnimatePresence>
                                 {displayedImages.map((img, index) => (
                                     <motion.div
@@ -189,7 +197,7 @@ export default function Gallery() {
                                         exit={{ opacity: 0, scale: 0.95 }}
                                         transition={{ duration: 0.4 }}
                                         onClick={() => openLightbox(index)}
-                                        className="relative w-full aspect-square bg-gray-100 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
+                                        className="relative w-full aspect-[4/5] bg-gray-100 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
                                     >
                                         <Image
                                             src={img.url}
@@ -216,7 +224,7 @@ export default function Gallery() {
                             <div className="mt-12 flex justify-center">
                                 <button
                                     onClick={() => setVisibleCount(prev => prev + 20)}
-                                    className="flex items-center gap-2 px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold font-outfit hover:bg-amber-700 transition-colors shadow-lg shadow-brand-orange/30 group active:scale-95"
+                                    className="flex items-center gap-2 px-8 py-3.5 bg-brand-orange text-white rounded-full font-semibold font-space-grotesk hover:bg-amber-700 transition-colors shadow-lg shadow-brand-orange/30 group active:scale-95"
                                 >
                                     Load More
                                     <ChevronDown className="group-hover:translate-y-1 transition-transform" />
@@ -298,5 +306,17 @@ export default function Gallery() {
                 )}
             </AnimatePresence>
         </section>
+    );
+}
+
+export default function Gallery() {
+    return (
+        <Suspense fallback={
+            <div className="flex justify-center items-center py-20 min-h-screen">
+                <Loader2 className="w-10 h-10 animate-spin text-brand-orange" />
+            </div>
+        }>
+            <GalleryContent />
+        </Suspense>
     );
 }

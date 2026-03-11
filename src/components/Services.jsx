@@ -1,41 +1,91 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Baby, Users, PartyPopper, Camera } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function Services() {
-    const serviceCategories = [
+    const baseCategories = [
         {
-            title: "Studio & Family Photography",
-            description: "Timeless portraits of your loved ones, captured in our comfortable Tirupati studio.",
-            icon: <Baby className="text-white w-6 h-6" />,
-            image: "",
-            items: [
-                "Newborn photography",
-                "Baby photoshoots",
-                "1-year baby milestone shoots",
-                "Family portraits",
-                "Studio photography sessions"
-            ]
+            title: "Newborn Babys",
+            category: "Newborn Babys",
+            image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop",
         },
         {
-            title: "Event & Occasion Photography",
-            description: "Comprehensive coverage for your special days, preserving every candid emotion.",
-            icon: <PartyPopper className="text-white w-6 h-6" />,
-            image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop",
-            items: [
-                "Event photography",
-                "Function photography",
-                "Candid photography",
-                "Photography & videography coverage"
-            ]
+            title: "Weddings",
+            category: "Wedding",
+            image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
+        },
+        {
+            title: "Pre Weddings",
+            category: "Pre Weddings",
+            image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
+        },
+        {
+            title: "Models",
+            category: "Models",
+            image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
+        },
+        {
+            title: "Birthdays",
+            category: "Birthdays",
+            image: "https://images.unsplash.com/photo-1530103862676-de88d12226dd?q=80&w=800&auto=format&fit=crop",
+        },
+        {
+            title: "Maternity",
+            category: "Maternity",
+            image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=800&auto=format&fit=crop",
         }
     ];
 
+    const [serviceCategories, setServiceCategories] = useState(baseCategories);
+
+    // Fetch matching category images from Supabase storage silently
+    useEffect(() => {
+        async function fetchServiceImages() {
+            try {
+                // Fetch the list of images, sorted newest first
+                const { data, error } = await supabase.storage.from("gallery-images").list("services", {
+                    limit: 100,
+                    offset: 0,
+                    sortBy: { column: 'created_at', order: 'desc' },
+                });
+
+                if (error || !data) return;
+
+                const updatedCategories = baseCategories.map(cat => {
+                    // The upload API strips out spaces, so "Newborn Babys" becomes "NewbornBabys"
+                    const safeCategory = cat.category.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
+
+                    // Since it's sorted by newest, the first match will naturally be the latest upload
+                    const matchingFile = data.find(f => f.name.toLowerCase().startsWith(safeCategory));
+
+                    if (matchingFile) {
+                        const { data: { publicUrl } } = supabase.storage
+                            .from("gallery-images")
+                            .getPublicUrl(`services/${matchingFile.name}`);
+                        // Add cache-busting timestamp to bypass stale browser cache on fresh upload
+                        return { ...cat, image: `${publicUrl}?t=${new Date(matchingFile.created_at || Date.now()).getTime()}` };
+                    }
+
+                    return cat;
+                });
+
+                setServiceCategories(updatedCategories);
+            } catch (err) {
+                console.error("Failed to load services images:", err);
+            }
+        }
+
+        fetchServiceImages();
+    }, []);
+
     return (
-        <section id="services" className="py-24 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="services" className="py-24 bg-[#f8f9fa] overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -47,77 +97,66 @@ export default function Services() {
                             transition: { staggerChildren: 0.15, delayChildren: 0.1 }
                         }
                     }}
-                    className="text-center mb-16"
+                    className="flex flex-col items-center justify-center text-center mb-12"
                 >
                     <motion.h2
-                        variants={{
-                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
-                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
-                        className="text-sm font-bold tracking-widest text-brand-orange uppercase mb-3"
+                        variants={{ hidden: { opacity: 0, y: 40, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
+                        className="text-sm font-space-grotesk rounded-md px-2 py-1 border border-black/20 font-bold tracking-widest text-brand-orange uppercase mb-3"
                     >
                         Our Expertise
                     </motion.h2>
                     <motion.h3
-                        variants={{
-                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
-                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
-                        className="text-4xl md:text-5xl font-heading font-extrabold text-brand-dark"
+                        variants={{ hidden: { opacity: 0, y: 40, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
+                        className="text-4xl md:text-5xl lg:text-6xl font-instrument italic font-medium text-brand-dark mb-4"
                     >
                         Photography Services
                     </motion.h3>
                     <motion.p
-                        variants={{
-                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
-                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
-                        className="mt-4 text-brand-dark/70 max-w-2xl mx-auto text-lg"
+                        variants={{ hidden: { opacity: 0, y: 40, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
+                        className="text-brand-dark/60 font-space-grotesk max-w-lg text-base md:text-lg mx-auto"
                     >
-                        From your baby&apos;s first steps to grand family celebrations, we capture the essence of your most important milestones.
+                        Swipe through to discover our specialized sessions.
                     </motion.p>
                 </motion.div>
+            </div>
 
-                <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+            {/* Native Horizontally scrolling container */}
+            <div className="w-full relative">
+                <div className="flex gap-6 lg:gap-6 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-12 pt-4 scrollbar-hide">
                     {serviceCategories.map((category, idx) => (
-                        <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ duration: 0.6, delay: idx * 0.2 }}
-                            className="group rounded-3xl overflow-hidden bg-brand-light border border-black/5 hover:shadow-2xl hover:shadow-brand-orange/10 transition-all duration-300"
-                        >
-                            <div className="relative h-64 sm:h-80 w-full overflow-hidden">
-                                <div className="w-full h-full bg-brand-dark/10 flex items-center justify-center text-brand-dark/40">
-                                    Placeholder Image
-                                </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-brand-dark/20 to-transparent flex items-end p-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-brand-orange p-3 rounded-xl shadow-lg">
-                                            {category.icon}
-                                        </div>
-                                        <h4 className="text-2xl sm:text-3xl font-heading font-bold text-white drop-shadow-md">
-                                            {category.title}
-                                        </h4>
+                        <Link href={`/?category=${encodeURIComponent(category.category)}#portfolio`} key={idx} className="block shrink-0 snap-center first:ml-auto last:mr-[calc(100vw-85vw-32px)] sm:last:mr-[calc(100vw-400px-48px)] lg:last:mr-[calc(100vw-350px-64px)] xl:last:mr-auto">
+                            <motion.div
+                                initial={{ opacity: 0, x: -50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true, margin: "-50px" }}
+                                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                                className="group relative w-[70vw] sm:w-[280px] lg:w-[320px] xl:w-[350px] aspect-[4/5] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5 cursor-pointer"
+                            >
+                                {/* Background Image */}
+                                <Image
+                                    src={category.image}
+                                    alt={category.title}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 640px) 100vw, 350px"
+                                />
+
+                                {/* Dark Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/50 via-brand-dark/20 to-transparent flex flex-col items-start justify-end p-6 sm:p-8" />
+
+                                {/* Content */}
+                                <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex justify-between items-end">
+                                    <h4 className="text-2xl sm:text-3xl font-space-grotesk  font-xl text-white drop-shadow-md pr-2">
+                                        {category.title}
+                                    </h4>
+
+                                    {/* Arrow icon reveals on hover */}
+                                    <div className="bg-white/20 backdrop-blur-md p-3.5 rounded-full text-white opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 border border-white/30 hover:bg-white hover:text-brand-dark flex-shrink-0">
+                                        <ArrowUpRight strokeWidth={2.5} size={22} />
                                     </div>
                                 </div>
-                            </div>
-
-                            <div className="p-8">
-                                <p className="text-brand-dark/80 mb-6 text-lg">
-                                    {category.description}
-                                </p>
-                                <ul className="space-y-3">
-                                    {category.items.map((item, i) => (
-                                        <li key={i} className="flex items-center gap-3 text-brand-dark font-medium">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-brand-orange shrink-0" />
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        </Link>
                     ))}
                 </div>
             </div>

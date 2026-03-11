@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function FloatingContactButtons() {
     return (
-        <div className="fixed bottom-55 right-2 flex flex-col gap-3 z-50">
+        <div className="fixed bottom-10 right-2 flex flex-col gap-3 z-50">
             {/* Instagram Button */}
             <motion.a
                 href="https://www.instagram.com/focus_momentsstudio/"
@@ -13,7 +13,7 @@ export default function FloatingContactButtons() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full grid place-items-center text-white shadow-lg shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 group"
+                className="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full grid place-items-center text-white  hover:shadow-xl hover:shadow-pink-500/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 group"
                 aria-label="Follow us on Instagram"
             >
                 <Instagram size={24} className="group-hover:scale-110 transition-transform" />
@@ -24,7 +24,7 @@ export default function FloatingContactButtons() {
                 href="tel:+918328191729"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-12 h-12 bg-blue-600 rounded-full grid place-items-center text-white shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 group"
+                className="w-12 h-12 bg-blue-600 rounded-full grid place-items-center text-white hover:shadow-xl hover:shadow-blue-600/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 group"
                 aria-label="Call us"
             >
                 <Phone size={22} className="group-hover:scale-110 transition-transform" />
@@ -37,7 +37,7 @@ export default function FloatingContactButtons() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-12 h-12 bg-[#25D366] rounded-full grid place-items-center text-white shadow-lg shadow-[#25D366]/30 hover:shadow-xl hover:shadow-[#25D366]/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366] group"
+                className="w-12 h-12 bg-[#25D366] rounded-full grid place-items-center text-white hover:shadow-xl hover:shadow-[#25D366]/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366] group"
                 aria-label="Chat on WhatsApp"
             >
                 <svg

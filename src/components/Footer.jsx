@@ -4,7 +4,7 @@ import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#080808] text-white/60 pt-16 pb-6">
+        <footer className="bg-[#080808]  text-white/60 pt-16 pb-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Main Grid */}
@@ -16,24 +16,24 @@ export default function Footer() {
 
                             <div className="flex items-center justify-center w-[56px] h-[42px]">
                                 <BrandLogo
-                                    className="w-full h-full scale-[1.6] origin-center"
+                                    className="w-full h-full scale-[1.9] origin-center"
                                     variant="white"
                                 />
                             </div>
 
-                            <div className="flex flex-col justify-center leading-tight">
-                                <span className="font-heading font-bold text-[16px] tracking-tight text-white">
+                            <div className="flex flex-col justify-center font-space-grotesk tracking-wider leading-tight">
+                                <span className="font-bold text-[16px] tracking-[0.09em] text-white">
                                     FOCUS MOMENTS
                                 </span>
 
-                                <span className="text-[10px] font-semibold tracking-[0.28em] text-brand-orange">
+                                <span className="text-[13px] font-semibold tracking-[0.18em] text-brand-orange">
                                     STUDIO
                                 </span>
                             </div>
 
                         </Link>
-                        <p className="text-sm leading-relaxed text-white/40 max-w-xs">
-                            Capturing life's most beautiful moments with patience, creativity, and care in Tirupati.
+                        <p className="text-sm font-faculty-glyphic  leading-relaxed text-white/40 max-w-xs">
+                            "Capturing life's most beautiful moments with patience, creativity, and care in Tirupati."
                         </p>
                         {/* Social Icon */}
                         <a
@@ -50,8 +50,9 @@ export default function Footer() {
                     {/* Quick Links */}
                     <div className="flex flex-col gap-4">
                         <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">Quick Links</h4>
-                        <ul className="flex flex-col gap-3 text-sm">
-                            <li><Link href="#portfolio" className="hover:text-brand-orange transition-colors">Our Services</Link></li>
+                        <ul className="flex flex-col gap-3 font-space-grotesk text-sm">
+                            <li><Link href="#services" className="hover:text-brand-orange transition-colors">Our Services</Link></li>
+                            <li><Link href="#portfolio" className="hover:text-brand-orange transition-colors">Portfolio</Link></li>
                             <li><Link href="#reviews" className="hover:text-brand-orange transition-colors">Client Reviews</Link></li>
                             <li><Link href="#pricing" className="hover:text-brand-orange transition-colors">Pricing</Link></li>
                             <li><Link href="#about" className="hover:text-brand-orange transition-colors">About the Studio</Link></li>
@@ -61,7 +62,7 @@ export default function Footer() {
                     {/* Photography */}
                     <div className="flex flex-col gap-4">
                         <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">Photography</h4>
-                        <ul className="flex flex-col gap-3 text-sm">
+                        <ul className="flex font-space-grotesk flex-col gap-3 text-sm">
                             <li>Baby &amp; Newborn</li>
                             <li>Family Portraits</li>
                             <li>1-Year Milestones</li>
@@ -73,7 +74,7 @@ export default function Footer() {
                     {/* Contact */}
                     <div className="flex flex-col gap-4">
                         <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">Contact</h4>
-                        <div className="flex flex-col gap-3 text-sm">
+                        <div className="flex flex-col font-space-grotesk gap-3 text-sm">
                             <div className="flex items-start gap-2">
                                 <MapPin size={15} className="text-brand-orange shrink-0 mt-0.5" />
                                 <p>5-1-78, Sarojini Devi Rd, Nehru Nagar, Tirupati – 517501</p>
@@ -92,7 +93,7 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30">
+                <div className="border-t border-white/10 font-space-grotesk pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30">
                     <p>
                         © {new Date().getFullYear()} All rights reserved. Focus Moments Studio.
                         {/* Secret Admin Link */}

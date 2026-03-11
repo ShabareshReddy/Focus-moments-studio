@@ -32,7 +32,7 @@ export default function SocialProof() {
     return (
         <section id="reviews" className="py-24 bg-black overflow-hidden relative">
             {/* Background Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-orange/10 blur-[70px] rounded-full pointer-events-none"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-orange/5 blur-[70px] rounded-full pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16 text-center">
                 <motion.div
@@ -61,10 +61,10 @@ export default function SocialProof() {
                             hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="text-3xl md:text-5xl lg:text-6xl font-gloock  text-white mb-6 tracking-wide"
+                        className="text-3xl md:text-5xl lg:text-6xl font-instrument italic font-sm text-white mb-6 tracking-wide"
                     >
-                        We Help Capture Your <br className="hidden md:block" /> Most Precious{" "}
-                        <span className="text-brand-orange">Memories</span>
+                        What Families Say About Their <br className="hidden md:block" />
+                        <span className="text-brand-orange">Moments With Us</span>
                     </motion.h2>
                 </motion.div>
             </div>
@@ -98,8 +98,8 @@ function ReviewCard({ review }) {
                     {review.author.charAt(0)}
                 </div>
                 <div>
-                    <h4 className="text-[#E0E0E0] font-medium text-sm md:text-base leading-tight">{review.author}</h4>
-                    <p className="text-gray-500 text-xs md:text-sm mt-0.5">{review.role}</p>
+                    <h4 className="text-[#E0E0E0] font-roboto text-sm md:text-base leading-tight">{review.author}</h4>
+                    <p className="text-gray-500 font-outfit text-xs md:text-sm mt-0.5">{review.role}</p>
                 </div>
             </div>
 
@@ -115,7 +115,7 @@ function ReviewCard({ review }) {
             </div>
 
             {/* Quote */}
-            <p className="text-[#b3b3b3] text-sm md:text-[15px] leading-relaxed">
+            <p className="text-[#b3b3b3] font-space-grotesk text-sm md:text-[15px] leading-relaxed">
                 {review.text}
             </p>
         </div>

@@ -1,4 +1,4 @@
-import { Inter, Outfit,Instrument_Serif, Playfair_Display,Gloock} from "next/font/google";
+import { Inter,Bodoni_Moda,Outfit,Faculty_Glyphic, Instrument_Serif,Roboto, Playfair_Display,Gloock,Space_Grotesk} from "next/font/google";
 import "./globals.css";
 import GlobalLayoutWrapper from "@/components/GlobalLayoutWrapper";
 
@@ -7,10 +7,35 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const bodoni_moda = Bodoni_Moda({
+  variable: "--font-bodoni_moda",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const space_grotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const faculty_glyphic = Faculty_Glyphic({
+  variable: "--font-faculty-glyphic",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 const instrument = Instrument_Serif({
   variable: "--font-instrument",
   subsets: ["latin"],
   weight: ["400"],
+   style: ["normal", "italic"],
 });
 
 const gloock = Gloock({
@@ -41,7 +66,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth">
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${outfit.variable} ${instrument.variable} ${gloock.variable} ${playfair.variable} antialiased font-sans flex flex-col min-h-screen`}
+        className={`${bodoni_moda.variable} ${faculty_glyphic.variable} ${roboto.variable} ${space_grotesk.variable} ${inter.variable} ${outfit.variable} ${instrument.variable} ${gloock.variable}  ${playfair.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
         <GlobalLayoutWrapper>
           {children}
