@@ -150,8 +150,12 @@ export default function Services() {
                                         {category.title}
                                     </h4>
 
-                                    {/* Arrow icon reveals on hover */}
-                                    <div className="bg-white/20 backdrop-blur-md p-3.5 rounded-full text-white opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 border border-white/30 hover:bg-white hover:text-brand-dark flex-shrink-0">
+                                    {/* Arrow icon reveals on hover for desktop, always visible on mobile */}
+                                    <div className="bg-white/20 backdrop-blur-md p-3.5 rounded-full text-white transform transition-all duration-300 border border-white/30 hover:bg-white hover:text-brand-dark flex-shrink-0
+                                        opacity-100 translate-y-0
+                                        lg:opacity-0 lg:translate-y-4 
+                                        lg:group-hover:opacity-100 lg:group-hover:translate-y-0
+                                    ">
                                         <ArrowUpRight strokeWidth={2.5} size={22} />
                                     </div>
                                 </div>

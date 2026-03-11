@@ -209,9 +209,6 @@ export default function Pricing() {
                         </motion.div>
                     ))}
                 </div>
-                <p className=" justify-center mx-auto items-center ">All packages can be customized based on your requirements.</p>
-
-
             </div>
         </section>
     );
