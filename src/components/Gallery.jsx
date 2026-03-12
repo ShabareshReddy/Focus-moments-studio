@@ -129,7 +129,7 @@ function GalleryContent() {
                             hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
                             visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="inline-block px-3 py-1 rounded-sm bg-transparent border border-black/30 text-brand-orange text-sm font-bold tracking-[0.3em] mb-3 uppercase"
+                        className="inline-block px-2 py-1 rounded-sm bg-transparent border border-black/30 text-brand-orange text-sm font-bold tracking-[0.2em] mb-3 uppercase"
                     >
                         Portfolio
                     </motion.span>
@@ -166,7 +166,7 @@ function GalleryContent() {
                             }}
                             key={category}
                             onClick={() => { setActiveCategory(category); setLightboxIndex(null); setVisibleCount(20); }}
-                            className={`px-6 py-2 rounded-full text-sm font-space-grotesk transition-all duration-300 hover:scale-[1.05] active:scale-95 ${activeCategory === category
+                            className={`px-6 py-2 rounded-full text-sm font-medium font-space-grotesk transition-all duration-300 hover:scale-[1.05] active:scale-95 ${activeCategory === category
                                 ? "bg-brand-orange text-white shadow-md shadow-brand-orange/30"
                                 : "bg-gray-100 text-zinc-900 hover:bg-gray-200 hover:shadow-sm border border-black/5"
                                 }`}

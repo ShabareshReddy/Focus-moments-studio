@@ -30,7 +30,7 @@ export default function AdminLogin() {
                     <div className="w-16 h-16 bg-brand-orange/10 rounded-full flex items-center justify-center mb-4">
                         <Lock className="text-brand-orange" size={32} />
                     </div>
-                    <h2 className="text-center text-3xl font-space-grotesk font-extrabold text-brand-dark">
+                    <h2 className="text-center text-3xl font-instrument tracking-wide font-extrabold text-brand-dark">
                         Studio Admin
                     </h2>
                     <p className="mt-2 text-center text-sm font-space-grotesk text-gray-500">
@@ -60,7 +60,7 @@ export default function AdminLogin() {
                     {error && <p className="text-red-500 text-sm text-center font-medium">{error}</p>}
                     <button
                         type="submit"
-                        className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold font-space-grotesk rounded-lg text-white bg-brand-orange hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange transition-all duration-300 shadow-md"
+                        className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-md font-bold font-space-grotesk rounded-lg text-white bg-brand-orange hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange transition-all duration-300 shadow-md"
                     >
                         Access Dashboard
                     </button>

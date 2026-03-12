@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Camera, Menu, X, ArrowUpRight } from "lucide-react";
+import { Camera, Menu, X, ArrowUpRight, ArrowRight } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 
 export default function Navbar() {
@@ -25,13 +25,15 @@ export default function Navbar() {
         { name: "About", href: "#about" },
     ];
 
-    const isSolid = isScrolled || isMobileMenuOpen;
+    const isSolid = isScrolled && !isMobileMenuOpen;
 
     return (
         <nav
-            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isSolid
-                ? "bg-white/80 backdrop-blur-xs shadow-sm py-1.5"
-                : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-xs py-1"
+            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isMobileMenuOpen
+                ? "bg-black py-1.5"
+                : isSolid
+                    ? "bg-white/80 backdrop-blur-xs shadow-sm py-1.5"
+                    : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-xs py-1"
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-3">
@@ -68,7 +70,7 @@ export default function Navbar() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className={`text-lg font-space-grotesk font-medium transition-colors
+                                    className={`text-md font-space-grotesk font-medium transition-colors
                                          hover:text-brand-orange active:opacity-60 ${isSolid ? "text-brand-dark font-medium" : "text-white"
                                         }`}
                                 >
@@ -98,26 +100,23 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full w-full bg-brand-dark border-t border-white/10 shadow-2xl py-6 flex flex-col items-center gap-1">
-                    {navLinks.map((link, i) => (
-                        <div key={link.name} className="w-2/3">
+                <div className="md:hidden absolute top-full w-full font-space-grotesk bg-black/95 border-t border-white/10 shadow-2xl py-6 flex flex-col items-start px-8 gap-1">
+                    {navLinks.map((link) => (
+                        <div key={link.name} className="w-full">
                             <Link
                                 href={link.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="block w-full text-center font-outfit py-4 text-lg font-large text-white/90 hover:text-brand-orange active:text-brand-orange active:scale-95 transition-all duration-150 tracking-wide"
+                                className=" flex  items-center block w-full text-left font-space-grotesk py-3 text-xl font-medium text-white/90 hover:text-brand-orange active:text-brand-orange active:scale-95 transition-all duration-150 tracking-wide"
                             >
                                 {link.name}
                             </Link>
-                            {i < navLinks.length - 1 && (
-                                <div className="mx-8 h-px bg-white/10" />
-                            )}
                         </div>
                     ))}
-                    <div className="w-full px-9 mt-4">
+                    <div className="mt-6 w-full">
                         <a
                             href="tel:+918328191729"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block w-full text-center bg-brand-orange text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-brand-orange active:scale-95 active:opacity-80 transition-all duration-150"
+                            className="inline-block text-left  bg-brand-orange text-white px-6 py-3 text-xl font-space-grotesk hover:bg-white hover:text-brand-orange active:scale-95 active:opacity-80 transition-all duration-150"
                         >
                             📞 Call Now: +91 8328191729
                         </a>

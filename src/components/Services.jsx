@@ -122,7 +122,7 @@ export default function Services() {
 
             {/* Native Horizontally scrolling container */}
             <div className="w-full relative">
-                <div className="flex gap-6 lg:gap-6 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-12 pt-4 scrollbar-hide">
+                <div className="flex gap-3 lg:gap-4 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-12 pt-4 scrollbar-hide">
                     {serviceCategories.map((category, idx) => (
                         <Link href={`/?category=${encodeURIComponent(category.category)}#portfolio`} key={idx} className="block shrink-0 snap-center first:ml-auto last:mr-[calc(100vw-85vw-32px)] sm:last:mr-[calc(100vw-400px-48px)] lg:last:mr-[calc(100vw-350px-64px)] xl:last:mr-auto">
                             <motion.div
@@ -130,7 +130,7 @@ export default function Services() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                className="group relative w-[70vw] sm:w-[280px] lg:w-[320px] xl:w-[350px] aspect-[4/5] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5 cursor-pointer"
+                                className="group relative w-[65vw] sm:w-[250px] lg:w-[280px] xl:w-[300px] aspect-[4/5] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5 cursor-pointer"
                             >
                                 {/* Background Image */}
                                 <Image
@@ -151,7 +151,7 @@ export default function Services() {
                                     </h4>
 
                                     {/* Arrow icon reveals on hover for desktop, always visible on mobile */}
-                                    <div className="bg-white/20 backdrop-blur-md p-3.5 rounded-full text-white transform transition-all duration-300 border border-white/30 hover:bg-white hover:text-brand-dark flex-shrink-0
+                                    <div className="bg-white/30 backdrop-blur-md p-3 rounded-full text-white transform transition-all duration-300 border border-white/30 hover:bg-white hover:text-brand-dark flex-shrink-0
                                         opacity-100 translate-y-0
                                         lg:opacity-0 lg:translate-y-4 
                                         lg:group-hover:opacity-100 lg:group-hover:translate-y-0

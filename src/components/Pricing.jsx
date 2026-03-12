@@ -166,7 +166,7 @@ export default function Pricing() {
 
                             <div className="p-6 flex flex-col flex-1">
                                 {/* Badge + title */}
-                                <h3 className="text-xl md:text-2xl font-gloock font-medium text-white mb-1 tracking-wide">{plan.title}</h3>
+                                <h3 className="text-xl md:text-2xl font-playfair font-medium text-white mb-1 tracking-wide">{plan.title}</h3>
                                 <p className="text-white/60 font-space-grotesk text-sm mb-4">{plan.subtitle}</p>
 
                                 {/* Price */}
@@ -196,7 +196,7 @@ export default function Pricing() {
                                 {/* CTA */}
                                 <a
                                     href="tel:+918328191729"
-                                    className={`flex items-center justify-center gap-2 w-full py-3 rounded-full font-semibold text-base transition-all duration-200 active:scale-95
+                                    className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-base transition-all duration-200 active:scale-95
                                         ${plan.highlight
                                             ? "bg-brand-orange text-white hover:bg-white hover:text-brand-orange "
                                             : "bg-white/8 text-white hover:bg-white/15 border border-white/12"
