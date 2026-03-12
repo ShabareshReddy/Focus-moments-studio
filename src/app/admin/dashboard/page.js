@@ -150,28 +150,32 @@ export default function AdminDashboard() {
         if (!file) return;
 
         setIsUploading(true);
-        // Reset input so the same file could be selected again if needed
+        // Reset input so the same file could be re-selected if needed
         e.target.value = null;
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('category', activeTab === "hero" ? "Hero" : uploadCategory);
-        formData.append('folder', activeTab === "hero" ? "hero" : activeTab === "services" ? "services" : "uploads");
-
         try {
-            const res = await fetch('/api/gallery/upload', {
-                method: 'POST',
-                body: formData,
-            });
+            // 1. Build the file path directly — same convention as before
+            const folder = activeTab === "hero" ? "hero" : activeTab === "services" ? "services" : "uploads";
+            const category = activeTab === "hero" ? "Hero" : uploadCategory;
+            const fileExt = file.name.split('.').pop();
+            const safeCategory = category.replace(/[^a-zA-Z0-9-]/g, '');
+            const fileName = `${safeCategory}_${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const filePath = `${folder}/${fileName}`;
 
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error || 'Failed to upload image');
-            }
+            // 2. Upload directly from the browser to Supabase Storage
+            // This bypasses Vercel's body-size limit — file goes browser → Supabase, not through your server
+            const { error: uploadError } = await supabase.storage
+                .from('gallery-images')
+                .upload(filePath, file, {
+                    contentType: file.type,
+                    upsert: false,
+                });
 
-            // Successfully uploaded, refresh the gallery
+            if (uploadError) throw new Error(uploadError.message);
+
+            // 3. Refresh gallery to show the newly uploaded image
             await fetchImages();
-            
+
         } catch (error) {
             console.error("Upload error:", error);
             alert(`Upload failed: ${error.message}`);
