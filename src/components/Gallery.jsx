@@ -9,6 +9,11 @@ import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn, ChevronDown } from "luci
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
 
+// Maps safe filenames like "NewbornBabys" back to display names like "Newborn Babys"
+const CATEGORY_MAP = Object.fromEntries(
+    CATEGORIES.filter(c => c !== "All").map(cat => [cat.replace(/[^a-zA-Z0-9-]/g, ''), cat])
+);
+
 function GalleryContent() {
     const searchParams = useSearchParams();
     const [images, setImages] = useState([]);
@@ -49,7 +54,9 @@ function GalleryContent() {
                         .getPublicUrl(`uploads/${file.name}`);
 
                     const parts = file.name.split('_');
-                    const category = parts.length > 1 ? parts[0] : "Uncategorized";
+                    const rawCategory = parts.length > 1 ? parts[0] : "Uncategorized";
+                    // Reverse lookup: "NewbornBabys" → "Newborn Babys"
+                    const category = CATEGORY_MAP[rawCategory] || rawCategory;
 
                     return {
                         id: file.id || file.name,

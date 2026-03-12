@@ -9,6 +9,11 @@ import Image from "next/image";
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
 const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models", "Birthdays", "Maternity"];
 
+// Maps safe filenames like "NewbornBabys" back to display names like "Newborn Babys"
+const CATEGORY_MAP = Object.fromEntries(
+    [...CATEGORIES, ...SERVICES_CATEGORIES].map(cat => [cat.replace(/[^a-zA-Z0-9-]/g, ''), cat])
+);
+
 export default function AdminDashboard() {
     const [images, setImages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -126,7 +131,9 @@ export default function AdminDashboard() {
                         .getPublicUrl(filePath);
                     
                     const parts = file.name.split('_');
-                    const category = parts.length > 1 ? parts[0] : "Uncategorized";
+                    const rawCategory = parts.length > 1 ? parts[0] : "Uncategorized";
+                    // Reverse lookup: "NewbornBabys" → "Newborn Babys"
+                    const category = CATEGORY_MAP[rawCategory] || rawCategory;
 
                     return {
                         name: file.name,
