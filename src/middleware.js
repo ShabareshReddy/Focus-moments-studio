@@ -18,7 +18,6 @@ export function middleware(request) {
             return NextResponse.redirect(new URL('/admin/dashboard', request.url));
         }
     }
-
     return NextResponse.next();
 }
 

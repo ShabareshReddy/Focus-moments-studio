@@ -10,7 +10,7 @@
   --color-background: var(--color-brand-light);
   --color-foreground: var(--color-brand-dark);
 
-  --font-inter: "Inter", sans-serif;
+
   --font-outfit: "Outfit", sans-serif;
   --font-instrument: var(--font-instrument), "Georgia", serif;
   --font-playfair: var(--font-playfair), "Georgia", serif;
@@ -18,9 +18,6 @@
   --font-space-grotesk: var(--font-space-grotesk), sans-serif;
   --font-roboto: var(--font-roboto), sans-serif;
   --font-faculty-glyphic: var(--font-faculty-glyphic), sans-serif;
-  --font-bodoni-moda: var(--font-bodoni-moda), serif;
-
-  --font-sans: var(--font-inter);
   --font-heading: var(--font-outfit);
 }
 
