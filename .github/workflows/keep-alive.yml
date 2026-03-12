@@ -1,0 +1,23 @@
+name: Supabase Keep-Alive Cron
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every Monday (1) and Thursday (4)
+    # This ensures the database is hit twice a week, resetting the 7-day pause timer.
+    - cron: '0 0 * * 1,4'
+  
+  # Allows you to trigger this workflow manually from the Actions tab in GitHub
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Keep-Alive Endpoint
+        # Note: Replace 'https://your-production-domain.com' with your actual live deployed URL 
+        # once the site is hosted on Vercel/Render.
+        run: |
+          curl -X GET "https://focusmomentsstudio.vercel.app/api/cron/keep-alive" \
+               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+               --fail --show-error
