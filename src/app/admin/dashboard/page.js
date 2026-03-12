@@ -6,8 +6,8 @@ import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid,
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
-const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
-const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models", "Birthdays", "Maternity"];
+const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Haldi", "Saree Functions", "Uncategorized"];
+const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models", "Birthdays", "Maternity", "Haldi", "Saree Functions"];
 
 // Maps safe filenames like "NewbornBabys" back to display names like "Newborn Babys"
 const CATEGORY_MAP = Object.fromEntries(
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
             const { data, error } = await supabase
                 .from('pricing_plans')
                 .select('*')
-                .order('order', { ascending: true });
+                .order('id', { ascending: true });
                 
             if (error) throw error;
             if (data) setPricingPlans(data);
@@ -67,16 +67,6 @@ export default function AdminDashboard() {
         setPricingPlans(prev => prev.map((p, i) => i === planIndex ? { ...p, [field]: value } : p));
     };
 
-    const handlePricingFeatureChange = (planIndex, featureIndex, value) => {
-        setPricingPlans(prev => prev.map((p, i) => {
-            if (i === planIndex) {
-                const newFeatures = p.features ? [...p.features] : [];
-                newFeatures[featureIndex] = value;
-                return { ...p, features: newFeatures };
-            }
-            return p;
-        }));
-    };
 
     const savePricingPlans = async () => {
         setIsSavingPricing(true);
@@ -85,12 +75,8 @@ export default function AdminDashboard() {
                 const { error } = await supabase
                     .from('pricing_plans')
                     .update({
-                        badge: plan.badge,
-                        title: plan.title,
-                        subtitle: plan.subtitle,
                         price: plan.price,
-                        duration: plan.duration,
-                        features: plan.features
+                        duration: plan.duration
                     })
                     .eq('id', plan.id);
                     
@@ -104,6 +90,7 @@ export default function AdminDashboard() {
             setIsSavingPricing(false);
         }
     };
+
 
     const fetchImages = async () => {
         setIsLoading(true);
@@ -419,40 +406,18 @@ export default function AdminDashboard() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {pricingPlans.map((plan, planIndex) => (
                                 <div key={plan.id || planIndex} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col gap-4">
-                                    <div>
-                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Badge</label>
-                                        <input type="text" value={plan.badge || ''} onChange={(e) => handlePricingChange(planIndex, 'badge', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-brand-orange outline-none" />
+                                    <div className="pb-3 border-b border-gray-100">
+                                        <h3 className="text-lg font-bold text-gray-900 font-space-grotesk">{plan.title}</h3>
+                                        <p className="text-sm text-gray-500 font-space-grotesk">{plan.subtitle}</p>
                                     </div>
-                                    <div>
-                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Title</label>
-                                        <input type="text" value={plan.title || ''} onChange={(e) => handlePricingChange(planIndex, 'title', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-bold text-gray-900 focus:ring-2 focus:ring-brand-orange outline-none" />
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Subtitle</label>
-                                        <input type="text" value={plan.subtitle || ''} onChange={(e) => handlePricingChange(planIndex, 'subtitle', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 focus:ring-2 focus:ring-brand-orange outline-none" />
-                                    </div>
-                                    <div className="flex gap-4">
+                                    <div className="flex flex-col sm:flex-row gap-4">
                                         <div className="flex-1">
                                             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Price</label>
                                             <input type="text" value={plan.price || ''} onChange={(e) => handlePricingChange(planIndex, 'price', e.target.value)} className="w-full px-3 py-2 border border-brand-orange/50 bg-orange-50 rounded-lg text-lg font-bold text-brand-orange focus:ring-2 focus:ring-brand-orange outline-none" />
                                         </div>
                                         <div className="flex-1">
-                                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Duration</label>
+                                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Duration Session</label>
                                             <input type="text" value={plan.duration || ''} onChange={(e) => handlePricingChange(planIndex, 'duration', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-brand-orange outline-none" />
-                                        </div>
-                                    </div>
-                                    <div className="pt-2 border-t border-gray-100">
-                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">Features List</label>
-                                        <div className="space-y-2">
-                                            {(plan.features || []).map((feature, idx) => (
-                                                <input 
-                                                    key={idx} 
-                                                    type="text" 
-                                                    value={feature || ''} 
-                                                    onChange={(e) => handlePricingFeatureChange(planIndex, idx, e.target.value)} 
-                                                    className="w-full px-3 py-1.5 border border-gray-200 rounded text-sm text-gray-700 focus:border-brand-orange outline-none" 
-                                                />
-                                            ))}
                                         </div>
                                     </div>
                                 </div>

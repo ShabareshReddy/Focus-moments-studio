@@ -1,14 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Check, Star, Phone } from "lucide-react";
+import { Check, Star, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const FALLBACK_PLANS = [
     {
+        id: "newborn",
+        title: "Newborn Babys",
+        subtitle: "Cherish those first precious moments",
+        price: "₹4,999",
+        duration: "2–3 hrs session",
+        highlight: false,
+        features: [
+            "Indoor studio setup",
+            "Theme-based backdrop & props",
+            "50+ edited photos",
+            "Online gallery delivery",
+        ],
+    },
+    {
         id: "birthday",
-        badge: "🎂 Birthday",
         title: "Birthday Shoot",
         subtitle: "Milestone celebrations done right",
         price: "₹4,999",
@@ -25,12 +38,11 @@ const FALLBACK_PLANS = [
     },
     {
         id: "pre-wedding",
-        badge: "💍 Pre-Wedding",
         title: "Pre-Wedding Shoot",
         subtitle: "Your love story, beautifully told",
         price: "₹9,999",
         duration: "4–5 hrs session",
-        highlight: true, // featured card
+        highlight: false,
         features: [
             "Outdoor + indoor locations",
             "2 outfit changes",
@@ -43,7 +55,6 @@ const FALLBACK_PLANS = [
     },
     {
         id: "wedding",
-        badge: "👑 Wedding",
         title: "Wedding Package",
         subtitle: "Every precious moment captured",
         price: "₹24,999",
@@ -60,11 +71,75 @@ const FALLBACK_PLANS = [
             "Online gallery for guests",
         ],
     },
+    {
+        id: "maternity",
+        title: "Maternity Shoot",
+        subtitle: "Celebrate the miracle of life",
+        price: "₹5,999",
+        duration: "2–3 hrs session",
+        highlight: false,
+        features: [
+            "Outdoor + indoor locations",
+            "Gown rentals available",
+            "50+ edited photos",
+            "Online gallery delivery",
+        ],
+    },
+    {
+        id: "models",
+        title: "Portfolio Shoot",
+        subtitle: "Professional portfolio building",
+        price: "₹5,999",
+        duration: "3–4 hrs session",
+        highlight: false,
+        features: [
+            "Indoor studio setup",
+            "3 outfit changes",
+            "30+ high-end retouched photos",
+            "Online gallery delivery",
+        ],
+    },
+    {
+        id: "haldi",
+        title: "Haldi Ceremony",
+        subtitle: "Vibrant and colorful memories",
+        price: "₹9,999",
+        duration: "4–5 hrs session",
+        highlight: false,
+        features: [
+            "Event coverage",
+            "Candid + traditional photography",
+            "150+ edited photos",
+            "Short highlight video",
+        ],
+    },
+    {
+        id: "saree-functions",
+        title: "Saree Ceremony",
+        subtitle: "Traditional celebration moments",
+        price: "₹9,999",
+        duration: "4–5 hrs session",
+        highlight: false,
+        features: [
+            "Event coverage",
+            "Candid + traditional photography",
+            "150+ edited photos",
+            "Short highlight video",
+        ],
+    }
 ];
 
 export default function Pricing() {
     const [plans, setPlans] = useState(FALLBACK_PLANS);
     const [loading, setLoading] = useState(true);
+    const scrollContainerRef = useRef(null);
+
+    const scroll = (direction) => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = 350; // Adjust as needed based on card width
+            scrollContainerRef.current.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+        }
+    };
 
     useEffect(() => {
         async function fetchPlans() {
@@ -72,7 +147,7 @@ export default function Pricing() {
                 const { data, error } = await supabase
                     .from('pricing_plans')
                     .select('*')
-                    .order('order', { ascending: true });
+                    .order('id', { ascending: true });
 
                 if (error) {
                     throw error;
@@ -141,72 +216,72 @@ export default function Pricing() {
                         Flexible photography packages for newborn shoots, baby milestones, weddings, and family celebrations in Tirupati.
                     </motion.p>
                 </motion.div>
+            </div>
 
-                {/* Cards — horizontal scroll on mobile, 3-col grid on desktop */}
-                <div className="flex gap-5 overflow-x-auto snap-x snap-mandatory pt-4 pb-4 md:pt-0 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-none">
+            {/* Cards — horizontal scroll on all devices */}
+            <div className="w-full relative group/slider">
+
+                {/* Left/Right Navigation Buttons */}
+                <button
+                    onClick={() => scroll("left")}
+                    className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-brand-orange text-white p-3 md:p-4 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg border border-white/20 hover:scale-105 hidden sm:flex"
+                    aria-label="Scroll left"
+                >
+                    <ChevronLeft strokeWidth={2.5} size={24} />
+                </button>
+                <button
+                    onClick={() => scroll("right")}
+                    className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-brand-orange text-white p-3 md:p-4 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg border border-white/20 hover:scale-105 hidden sm:flex"
+                    aria-label="Scroll right"
+                >
+                    <ChevronRight strokeWidth={2.5} size={24} />
+                </button>
+
+                <div ref={scrollContainerRef} className="flex gap-4 lg:gap-5 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pt-4 pb-12 scrollbar-none">
                     {plans.map((plan, i) => (
-                        <motion.div
-                            key={plan.id}
-                            initial={{ opacity: 0, y: 32 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: i * 0.12 }}
-                            className={`snap-center shrink-0 w-[82vw] sm:w-[340px] md:w-auto relative flex flex-col rounded-3xl overflow-hidden
-                                ${plan.highlight
-                                    ? " border-2 border-brand-orange/80 scale-[1.02] md:scale-105"
-                                    : "border border-white/8"
-                                }`}
-                        >
-                            {/* Popular badge */}
-                            {/* {plan.highlight && (
-                                <div className="absolute top-4 right-4 flex bg-brand-orange items-center gap-1 px-3 py-1 rounded-full  text-white text-[11px] font-bold tracking-wide">
-                                    <Star size={11} className="fill-white" /> Most Popular
+                        <div key={plan.id || i} className="flex shrink-0 snap-center h-auto first:ml-auto last:mr-[calc(100vw-85vw-32px)] sm:last:mr-[calc(100vw-360px-48px)] xl:last:mr-auto py-2">
+                            <div
+                                className="group relative w-[82vw] sm:w-[340px] lg:w-[calc(33.333vw-2rem)] xl:w-[400px] h-full flex flex-col rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 border border-white/8 hover:border-brand-orange hover:shadow-[0_0_20px_rgba(234,88,12,0.1)]"
+                            >
+                                <div className="p-6 md:p-8 flex flex-col flex-1 bg-[#121212]">
+                                    {/* Badge + title */}
+                                    <h3 className="text-xl md:text-2xl font-playfair font-medium text-white mb-2 tracking-wide">{plan.title}</h3>
+                                    <p className="text-white/60 font-space-grotesk text-sm mb-6">{plan.subtitle}</p>
+
+                                    {/* Price */}
+                                    <div className="flex items-end gap-2 mb-2">
+                                        <span className="text-4xl md:text-5xl font-bold font-space-grotesk tracking-tight transition-colors duration-300 text-white group-hover:text-brand-orange">
+                                            {plan.price}
+                                        </span>
+                                    </div>
+                                    <span className="text-white/50 font-space-grotesk text-md mb-6 block">{plan.duration}</span>
+
+                                    {/* Divider */}
+                                    <div className="w-full h-px bg-white/10 mb-6" />
+
+                                    {/* Features */}
+                                    <ul className="space-y-3.5 mb-8 flex-1">
+                                        {plan.features.map((f, idx) => (
+                                            <li key={idx} className="flex items-start gap-3 text-white/80 font-space-grotesk text-sm">
+                                                <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-300 bg-white/10 text-white/60 group-hover:bg-brand-orange/20 group-hover:text-brand-orange">
+                                                    <Check size={12} strokeWidth={3} />
+                                                </span>
+                                                <span className="leading-snug">{f}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {/* CTA */}
+                                    <a
+                                        href="tel:+918328191729"
+                                        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold text-base transition-all duration-300 active:scale-95 mt-auto bg-white/10 text-white group-hover:bg-brand-orange group-hover:shadow-[0_8px_20px_rgba(234,88,12,0.3)]"
+                                    >
+                                        <Phone size={16} />
+                                        Book This Shoot
+                                    </a>
                                 </div>
-                            )} */}
-
-                            <div className="p-6 flex flex-col flex-1">
-                                {/* Badge + title */}
-                                <h3 className="text-xl md:text-2xl font-playfair font-medium text-white mb-1 tracking-wide">{plan.title}</h3>
-                                <p className="text-white/60 font-space-grotesk text-sm mb-4">{plan.subtitle}</p>
-
-                                {/* Price */}
-                                <div className="flex items-end gap-2 mb-1">
-                                    <span className={`text-4xl md:text-5xl font-bold font-space-grotesk tracking-tight ${plan.highlight ? "text-brand-orange" : "text-white"}`}>
-                                        {plan.price}
-                                    </span>
-                                </div>
-                                <span className="text-white/50 font-space-grotesk text-md mb-5">{plan.duration}</span>
-
-                                {/* Divider */}
-                                <div className="w-full h-px bg-white/8 mb-5" />
-
-                                {/* Features */}
-                                <ul className="space-y-2.5 mb-6 flex-1">
-                                    {plan.features.map((f) => (
-                                        <li key={f} className="flex items-start gap-3 text-white/80 font-space-grotesk text-sm">
-                                            <span className={`mt-0.5 shrink-0 w-5 h-5 rounded-full flex items-center justify-center
-                                                ${plan.highlight ? "bg-brand-orange/20 text-brand-orange" : "bg-white/10 text-white/60"}`}>
-                                                <Check size={12} strokeWidth={3} />
-                                            </span>
-                                            {f}
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                {/* CTA */}
-                                <a
-                                    href="tel:+918328191729"
-                                    className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-base transition-all duration-200 active:scale-95
-                                        ${plan.highlight
-                                            ? "bg-brand-orange text-white hover:bg-white hover:text-brand-orange "
-                                            : "bg-white/8 text-white hover:bg-white/15 border border-white/12"
-                                        }`}
-                                >
-                                    <Phone size={16} />
-                                    Book This Shoot
-                                </a>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>

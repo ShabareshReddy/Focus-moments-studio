@@ -38,16 +38,25 @@ export default function Services() {
             title: "Maternity",
             category: "Maternity",
             image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=800&auto=format&fit=crop",
-        }
+        },
+        {
+            title: "Haldi",
+            category: "Haldi",
+            image: "https://images.unsplash.com/photo-1601662528567-526cd06f6582?q=80&w=800&auto=format&fit=crop",
+        },
+        {
+            title: "Saree Functions",
+            category: "Saree Functions",
+            image: "https://images.unsplash.com/photo-1583391733956-6c78276477e1?q=80&w=800&auto=format&fit=crop",
+        },
     ];
 
     const [serviceCategories, setServiceCategories] = useState(baseCategories);
 
-    // Fetch matching category images from Supabase storage silently
+    // Fetch matching category images from Supabase storage
     useEffect(() => {
         async function fetchServiceImages() {
             try {
-                // Fetch the list of images, sorted newest first
                 const { data, error } = await supabase.storage.from("gallery-images").list("services", {
                     limit: 100,
                     offset: 0,
@@ -57,20 +66,17 @@ export default function Services() {
                 if (error || !data) return;
 
                 const updatedCategories = baseCategories.map(cat => {
-                    // The upload API strips out spaces, so "Newborn Babys" becomes "NewbornBabys"
+                    // Strip spaces so "Newborn Babys" → "newbornbabys" to match filename prefix
                     const safeCategory = cat.category.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
-
-                    // Since it's sorted by newest, the first match will naturally be the latest upload
                     const matchingFile = data.find(f => f.name.toLowerCase().startsWith(safeCategory));
 
                     if (matchingFile) {
                         const { data: { publicUrl } } = supabase.storage
                             .from("gallery-images")
                             .getPublicUrl(`services/${matchingFile.name}`);
-                        // Add cache-busting timestamp to bypass stale browser cache on fresh upload
+                        // Cache-bust on fresh uploads
                         return { ...cat, image: `${publicUrl}?t=${new Date(matchingFile.created_at || Date.now()).getTime()}` };
                     }
-
                     return cat;
                 });
 

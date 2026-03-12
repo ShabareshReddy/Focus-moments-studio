@@ -7,7 +7,7 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn, ChevronDown } from "lucide-react";
 
-const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Uncategorized"];
+const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Haldi", "Saree Functions", "Uncategorized"];
 
 // Maps safe filenames like "NewbornBabys" back to display names like "Newborn Babys"
 const CATEGORY_MAP = Object.fromEntries(
