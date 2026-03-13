@@ -8,9 +8,8 @@ import Link from "next/link";
 
 
 
-// images come pre-fetched from the server via page.js (SSR)
-// No client-side Supabase call needed — images are ready on first render
-export default function Hero({ images = [] }) {
+export default function Hero() {
+    const [images, setImages] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Track the very first render so we can skip the opacity-0 fade-in
@@ -21,6 +20,39 @@ export default function Hero({ images = [] }) {
         setIsFirstRender(false);
     }, []);
 
+    // Fetch hero images client-side to ensure bypass of Next.js static cache
+    useEffect(() => {
+        async function fetchHeroImages() {
+            try {
+                const { data, error } = await supabase.storage.from("gallery-images").list("hero", {
+                    limit: 10,
+                    offset: 0,
+                    sortBy: { column: 'created_at', order: 'desc' },
+                });
+
+                if (error || !data) return;
+
+                const validFiles = data.filter(
+                    (file) => file.name !== ".emptyFolderPlaceholder" && file.name !== "hero"
+                );
+
+                const imageUrls = validFiles.map((file) => {
+                    const { data: { publicUrl } } = supabase.storage
+                        .from("gallery-images")
+                        .getPublicUrl(`hero/${file.name}`);
+                    // Cache bust based on creation time so deleted images don't linger
+                    return `${publicUrl}?t=${new Date(file.created_at || Date.now()).getTime()}`;
+                });
+
+                setImages(imageUrls);
+            } catch (err) {
+                console.error("Failed to load hero images:", err);
+            }
+        }
+
+        fetchHeroImages();
+    }, []);
+
     useEffect(() => {
         if (images.length === 0) return;
 
@@ -29,11 +61,7 @@ export default function Hero({ images = [] }) {
         }, 6000); // change every 6 seconds
 
         return () => clearInterval(timer);
-    }, [images]);
-
-
-
-    return (
+    }, [images]); return (
         <section className="relative h-screen min-h-[600px] flex items-end justify-center overflow-hidden bg-brand-dark">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
