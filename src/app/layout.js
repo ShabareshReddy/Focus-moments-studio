@@ -94,11 +94,40 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: "/og-image.jpg",
+    shortcut: "/og-image.jpg",
+    apple: "/og-image.jpg",
+  },
 };
 
 export default function RootLayout({ children }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Focus Moments Studio",
+    image: "https://focusmomentsstudio.in/og-image.jpg",
+    logo: "https://focusmomentsstudio.in/og-image.jpg",
+    url: "https://focusmomentsstudio.in",
+    telephone: "08328191729",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "5-1-78, Sarojini Devi Rd, opp. Sri Sai multi-speciality hospital, Nehru Nagar",
+      addressLocality: "Tirupati",
+      addressRegion: "Andhra Pradesh",
+      postalCode: "517501",
+      addressCountry: "IN"
+    }
+  };
+
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         suppressHydrationWarning
         className={` ${faculty_glyphic.variable} ${roboto.variable} ${space_grotesk.variable}  ${outfit.variable} ${instrument.variable}  ${playfair.variable} antialiased font-sans flex flex-col min-h-screen`}
