@@ -7,20 +7,6 @@ import { supabase } from "@/lib/supabase";
 
 const FALLBACK_PLANS = [
     {
-        id: "newborn",
-        title: "Newborn Babys",
-        subtitle: "Cherish those first precious moments",
-        price: "₹4,999",
-        duration: "2–3 hrs session",
-        highlight: false,
-        features: [
-            "Indoor studio setup",
-            "Theme-based backdrop & props",
-            "50+ edited photos",
-            "Online gallery delivery",
-        ],
-    },
-    {
         id: "birthday",
         title: "Birthday Shoot",
         subtitle: "Milestone celebrations done right",
@@ -34,6 +20,21 @@ const FALLBACK_PLANS = [
             "Online gallery delivery",
             "1 printed frame (8×10)",
             "Candid + posed shots",
+        ],
+    },
+
+    {
+        id: "newborn",
+        title: "Newborn Babys",
+        subtitle: "Cherish those first precious moments",
+        price: "₹4,999",
+        duration: "2–3 hrs session",
+        highlight: false,
+        features: [
+            "Indoor studio setup",
+            "Theme-based backdrop & props",
+            "50+ edited photos",
+            "Online gallery delivery",
         ],
     },
     {
@@ -239,9 +240,9 @@ export default function Pricing() {
 
                 <div ref={scrollContainerRef} className="flex gap-4 lg:gap-5 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pt-4 pb-12 scrollbar-none">
                     {plans.map((plan, i) => (
-                        <div key={plan.id || i} className="flex shrink-0 snap-center h-auto first:ml-auto last:mr-[calc(100vw-85vw-32px)] sm:last:mr-[calc(100vw-360px-48px)] xl:last:mr-auto py-2">
+                        <div key={plan.id || i} className="flex shrink-0 snap-start h-auto py-2">
                             <div
-                                className="group relative w-[82vw] sm:w-[340px] lg:w-[calc(33.333vw-2rem)] xl:w-[400px] h-full flex flex-col rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 border border-white/8 hover:border-brand-orange hover:shadow-[0_0_20px_rgba(234,88,12,0.1)]"
+                                className="group relative w-[82vw] sm:w-[340px] lg:w-[calc(33.333vw-2rem)] xl:w-[400px] h-full flex flex-col rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 border border-brand-orange shadow-[0_0_20px_rgba(234,88,12,0.1)] sm:border-white/8 sm:shadow-none sm:hover:border-brand-orange sm:hover:shadow-[0_0_20px_rgba(234,88,12,0.1)]"
                             >
                                 <div className="p-6 md:p-8 flex flex-col flex-1 bg-[#121212]">
                                     {/* Badge + title */}
@@ -250,7 +251,7 @@ export default function Pricing() {
 
                                     {/* Price */}
                                     <div className="flex items-end gap-2 mb-2">
-                                        <span className="text-4xl md:text-5xl font-bold font-space-grotesk tracking-tight transition-colors duration-300 text-white group-hover:text-brand-orange">
+                                        <span className="text-4xl md:text-5xl font-bold font-space-grotesk tracking-tight transition-colors duration-300 text-brand-orange sm:text-white sm:group-hover:text-brand-orange">
                                             {plan.price}
                                         </span>
                                     </div>
@@ -263,7 +264,7 @@ export default function Pricing() {
                                     <ul className="space-y-3.5 mb-8 flex-1">
                                         {plan.features.map((f, idx) => (
                                             <li key={idx} className="flex items-start gap-3 text-white/80 font-space-grotesk text-sm">
-                                                <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-300 bg-white/10 text-white/60 group-hover:bg-brand-orange/20 group-hover:text-brand-orange">
+                                                <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-300 bg-brand-orange/20 text-brand-orange sm:bg-white/10 sm:text-white/60 sm:group-hover:bg-brand-orange/20 sm:group-hover:text-brand-orange">
                                                     <Check size={12} strokeWidth={3} />
                                                 </span>
                                                 <span className="leading-snug">{f}</span>
@@ -274,7 +275,7 @@ export default function Pricing() {
                                     {/* CTA */}
                                     <a
                                         href="tel:+918328191729"
-                                        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold text-base transition-all duration-300 active:scale-95 mt-auto bg-white/10 text-white group-hover:bg-brand-orange group-hover:shadow-[0_8px_20px_rgba(234,88,12,0.3)]"
+                                        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold text-base transition-all duration-300 active:scale-95 mt-auto bg-brand-orange shadow-[0_8px_20px_rgba(234,88,12,0.3)] text-white sm:bg-white/10 sm:shadow-none sm:group-hover:bg-brand-orange sm:group-hover:shadow-[0_8px_20px_rgba(234,88,12,0.3)]"
                                     >
                                         <Phone size={16} />
                                         Book This Shoot

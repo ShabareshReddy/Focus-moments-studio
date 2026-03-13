@@ -8,8 +8,8 @@ import Link from "next/link";
 
 
 
-export default function Hero() {
-    const [images, setImages] = useState([]);
+export default function Hero({ initialImages = [] }) {
+    const [images, setImages] = useState(initialImages);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Track the very first render so we can skip the opacity-0 fade-in
