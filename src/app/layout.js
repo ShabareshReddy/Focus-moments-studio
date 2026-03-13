@@ -45,12 +45,38 @@ const outfit = Outfit({
 export const metadata = {
   metadataBase: new URL("https://focusmomentsstudio.in"),
   title: {
-    default: "Focus Moments Studio | Professional Photography in Tirupati",
-    template: "%s | Focus Moments Studio",
+    default: "Focus Moments Studio | Best Wedding, Newborn & Maternity Photographer in Tirupati",
+    template: "%s | Focus Moments Studio – Tirupati",
   },
-  description: "Top-rated photography studio in Tirupati. Specializing in baby photoshoots, family portraits, and event photography.",
-  keywords: ["photography", "Tirupati", "baby photoshoot", "family portraits", "wedding photography", "event photography", "Focus Moments Studio", "candid photography"],
-  authors: [{ name: "Focus Moments Studio" }],
+  description:
+    "Focus Moments Studio is Tirupati's most trusted photography studio, specializing in wedding photography, newborn baby photoshoots, and maternity photography. With over 8 years of experience, we deliver stunning, timeless images that capture your most precious moments. Rated 5★ on Google. Book your session today!",
+  keywords: [
+    // Wedding
+    "wedding photographer tirupati",
+    "best wedding photographer in tirupati",
+    "candid wedding photography tirupati",
+    "wedding photography tirupati",
+    "wedding videography tirupati",
+    // Newborn
+    "newborn photoshoot tirupati",
+    "newborn baby photography tirupati",
+    "baby photoshoot tirupati",
+    "best newborn photographer tirupati",
+    // Maternity
+    "maternity photoshoot tirupati",
+    "maternity photography tirupati",
+    "pregnancy photoshoot tirupati",
+    "best maternity photographer tirupati",
+    // General
+    "Focus Moments Studio",
+    "photography studio tirupati",
+    "professional photographer tirupati",
+    "family portrait photography tirupati",
+    "pre-wedding photography tirupati",
+    "birthday photoshoot tirupati",
+    "event photography tirupati",
+  ],
+  authors: [{ name: "Focus Moments Studio", url: "https://focusmomentsstudio.in" }],
   creator: "Focus Moments Studio",
   publisher: "Focus Moments Studio",
   formatDetection: {
@@ -62,8 +88,9 @@ export const metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Focus Moments Studio | Professional Photography in Tirupati",
-    description: "Top-rated photography studio in Tirupati. Specializing in baby photoshoots, family portraits, and event photography.",
+    title: "Focus Moments Studio | Best Wedding, Newborn & Maternity Photographer in Tirupati",
+    description:
+      "Tirupati's most trusted photography studio for weddings, newborn baby photoshoots & maternity sessions. 5★ rated. Book your unforgettable shoot today!",
     url: "https://focusmomentsstudio.in",
     siteName: "Focus Moments Studio",
     images: [
@@ -71,7 +98,7 @@ export const metadata = {
         url: "https://focusmomentsstudio.in/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Focus Moments Studio",
+        alt: "Focus Moments Studio – Professional Photography in Tirupati",
       },
     ],
     locale: "en_IN",
@@ -79,8 +106,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Focus Moments Studio | Professional Photography in Tirupati",
-    description: "Top-rated photography studio in Tirupati. Specializing in baby photoshoots, family portraits, and event photography.",
+    title: "Focus Moments Studio | Best Wedding, Newborn & Maternity Photographer in Tirupati",
+    description:
+      "Tirupati's most trusted photography studio for weddings, newborn baby photoshoots & maternity sessions. 5★ rated. Book today!",
     images: ["https://focusmomentsstudio.in/og-image.jpg"],
   },
   robots: {
@@ -95,9 +123,12 @@ export const metadata = {
     },
   },
   icons: {
-    icon: "/og-image.jpg",
-    shortcut: "/og-image.jpg",
-    apple: "/og-image.jpg",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/favicon.png", sizes: "48x48", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
   },
 };
 
@@ -109,15 +140,47 @@ export default function RootLayout({ children }) {
     image: "https://focusmomentsstudio.in/og-image.jpg",
     logo: "https://focusmomentsstudio.in/og-image.jpg",
     url: "https://focusmomentsstudio.in",
-    telephone: "08328191729",
+    telephone: "+910832819172",
+    description:
+      "Focus Moments Studio is a professional photography studio in Tirupati specializing in wedding photography, newborn photoshoots, maternity photography, pre-wedding shoots, birthday events, and family portraits.",
+    priceRange: "₹₹",
+    currenciesAccepted: "INR",
+    paymentAccepted: "Cash, UPI, Bank Transfer",
+    openingHours: "Mo-Sa 09:00-20:00",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5.0",
+      reviewCount: "31",
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: "5-1-78, Sarojini Devi Rd, opp. Sri Sai multi-speciality hospital, Nehru Nagar",
       addressLocality: "Tirupati",
       addressRegion: "Andhra Pradesh",
       postalCode: "517501",
-      addressCountry: "IN"
-    }
+      addressCountry: "IN",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "13.6288",
+      longitude: "79.4192",
+    },
+    sameAs: [
+      "https://www.instagram.com/focus_momentsstudio",
+      "https://www.justdial.com/Tirupati/Focus-moments-stu...",
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Photography Services",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wedding Photography in Tirupati" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Newborn Photoshoot in Tirupati" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Maternity Photoshoot in Tirupati" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Pre-Wedding Photography Tirupati" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Birthday Photoshoot Tirupati" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Family Portrait Photography Tirupati" } },
+      ],
+    },
   };
 
   return (
