@@ -3,8 +3,6 @@ import "./globals.css";
 import GlobalLayoutWrapper from "@/components/GlobalLayoutWrapper";
 
 
-
-
 const space_grotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
@@ -45,8 +43,57 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  title: "Focus Moments Studio | Professional Photography in Tirupati",
+  metadataBase: new URL("https://focusmomentsstudio.in"),
+  title: {
+    default: "Focus Moments Studio | Professional Photography in Tirupati",
+    template: "%s | Focus Moments Studio",
+  },
   description: "Top-rated photography studio in Tirupati. Specializing in baby photoshoots, family portraits, and event photography.",
+  keywords: ["photography", "Tirupati", "baby photoshoot", "family portraits", "wedding photography", "event photography", "Focus Moments Studio", "candid photography"],
+  authors: [{ name: "Focus Moments Studio" }],
+  creator: "Focus Moments Studio",
+  publisher: "Focus Moments Studio",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Focus Moments Studio | Professional Photography in Tirupati",
+    description: "Top-rated photography studio in Tirupati. Specializing in baby photoshoots, family portraits, and event photography.",
+    url: "https://focusmomentsstudio.in",
+    siteName: "Focus Moments Studio",
+    images: [
+      {
+        url: "https://focusmomentsstudio.in/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Focus Moments Studio",
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Focus Moments Studio | Professional Photography in Tirupati",
+    description: "Top-rated photography studio in Tirupati. Specializing in baby photoshoots, family portraits, and event photography.",
+    images: ["https://focusmomentsstudio.in/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }) {

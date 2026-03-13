@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Environment Variables — NEVER commit these
+.env.local
+.env*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+

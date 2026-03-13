@@ -18,6 +18,6 @@ jobs:
         # Note: Replace 'https://your-production-domain.com' with your actual live deployed URL 
         # once the site is hosted on Vercel/Render.
         run: |
-          curl -X GET "https://focusmomentsstudio.vercel.app/api/cron/keep-alive" \
+          curl -X GET "https://focusmomentsstudio.in/api/cron/keep-alive" \
                -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
                --fail --show-error

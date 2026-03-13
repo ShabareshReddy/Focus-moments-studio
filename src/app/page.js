@@ -21,7 +21,7 @@ async function getHeroImages() {
         sortBy: { column: "created_at", order: "desc" },
       });
 
-    if (error || !data) return [];
+      if (error || !data) return [];
 
     const validFiles = data.filter(
       (file) =>

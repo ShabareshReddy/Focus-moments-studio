@@ -13,7 +13,6 @@ const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models
 const CATEGORY_MAP = Object.fromEntries(
     [...CATEGORIES, ...SERVICES_CATEGORIES].map(cat => [cat.replace(/[^a-zA-Z0-9-]/g, ''), cat])
 );
-
 export default function AdminDashboard() {
     const [images, setImages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
