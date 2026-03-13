@@ -438,7 +438,6 @@ export default function AdminDashboard() {
                                         src={img.url}
                                         alt={img.name}
                                         fill
-                                        unoptimized
                                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                                     />

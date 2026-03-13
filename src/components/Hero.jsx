@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,53 +16,62 @@ export default function Hero({ images = [] }) {
     // Track the very first render so we can skip the opacity-0 fade-in
     // for the initial image. Subsequent slideshow transitions still fade.
     const [isFirstRender, setIsFirstRender] = useState(true);
+
     useEffect(() => {
         setIsFirstRender(false);
     }, []);
 
-    // Auto-cycle slideshow every 6 seconds
     useEffect(() => {
         if (images.length === 0) return;
+
         const timer = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % images.length);
-        }, 6000);
+        }, 6000); // change every 6 seconds
+
         return () => clearInterval(timer);
     }, [images]);
+
+
 
     return (
         <section className="relative h-screen min-h-[600px] flex items-end justify-center overflow-hidden bg-brand-dark">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
-                <AnimatePresence mode="popLayout">
-                    {images.length > 0 && (
+                {images.map((imgSrc, index) => {
+                    const isCurrent = index === currentIndex;
+                    const isPrev = index === (currentIndex - 1 + images.length) % images.length;
+
+                    return (
                         <motion.div
-                            key={currentIndex}
-                            // First image on first render: show immediately (no fade-in)
-                            // All subsequent transitions: fade in normally
-                            initial={
-                                isFirstRender && currentIndex === 0
-                                    ? { opacity: 1, scale: 1.08 }  // skip fade but keep zoom
-                                    : { opacity: 0, scale: 1.15 }
-                            }
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0 }}
+                            key={imgSrc}
+                            initial={false}
+                            animate={{
+                                opacity: isCurrent ? 1 : 0,
+                                zIndex: isCurrent ? 10 : (isPrev ? 5 : 0),
+                                scale: isCurrent ? 1 : 1.08
+                            }}
                             transition={{
-                                opacity: { duration: 0.9, ease: "easeInOut" },
-                                scale: { duration: 7, ease: "linear" },
+                                opacity: {
+                                    duration: 2.5,
+                                    ease: "easeInOut",
+                                    delay: isCurrent ? 0 : 2.5 // Hold previous image visible during crossfade
+                                },
+                                zIndex: { duration: 0 },
+                                scale: { duration: 15, ease: "linear" }
                             }}
                             className="absolute inset-0"
                         >
                             <Image
-                                src={images[currentIndex]}
-                                alt="Focus Moments Studio photography background"
+                                src={imgSrc}
+                                alt={`Focus Moments Studio Background ${index + 1}`}
                                 fill
-                                priority={currentIndex === 0}
+                                priority={index === 0}
                                 className="object-cover object-center"
                                 sizes="100vw"
                             />
                         </motion.div>
-                    )}
-                </AnimatePresence>
+                    );
+                })}
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/70 via-transparent to-transparent z-10" />
             </div>
