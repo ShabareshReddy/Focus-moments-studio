@@ -123,10 +123,7 @@ export const metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/favicon.ico", type: "image/x-icon" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -140,7 +137,7 @@ export default function RootLayout({ children }) {
     image: "https://focusmomentsstudio.in/og-image.jpg",
     logo: "https://focusmomentsstudio.in/og-image.jpg",
     url: "https://focusmomentsstudio.in",
-    telephone: "+910832819172",
+    telephone: "+91 8328191729",
     description:
       "Focus Moments Studio is a professional photography studio in Tirupati specializing in wedding photography, newborn photoshoots, maternity photography, pre-wedding shoots, birthday events, and family portraits.",
     priceRange: "₹₹",
@@ -167,7 +164,6 @@ export default function RootLayout({ children }) {
     },
     sameAs: [
       "https://www.instagram.com/focus_momentsstudio",
-      "https://www.justdial.com/Tirupati/Focus-moments-stu...",
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
