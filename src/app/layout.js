@@ -124,8 +124,8 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
-      { url: "/favicon.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon.png", type: "image/png" },
     ],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
