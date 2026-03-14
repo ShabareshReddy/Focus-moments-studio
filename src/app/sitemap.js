@@ -10,7 +10,7 @@ export default function sitemap() {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/gallery`,
+      url: `${baseUrl}/#portfolio`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
