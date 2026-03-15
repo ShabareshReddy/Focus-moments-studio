@@ -30,33 +30,28 @@ export default function Navbar() {
     return (
         <nav
             className={`fixed top-0 w-full z-50 transition-all duration-300 ${isMobileMenuOpen
-                ? "bg-black py-1.5"
+                ? "bg-black py-1"
                 : isSolid
-                    ? "bg-white/80 backdrop-blur-xs shadow-sm py-1.5"
+                    ? "bg-white/80 backdrop-blur-xs shadow-sm py-1"
                     : "bg-gradient-to-b from-black/50 to-transparent backdrop-blur-xs py-1"
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-3">
                 <div className="flex  justify-between items-center">
                     {/* Logo: SVG icon + stacked text side by side */}
-                    <Link href="/" className="flex items-center">
+                    <Link href="/" className="flex items-center gap-[6px]">
 
-                        <div className="flex items-center justify-center w-[50px] h-[50px]">
-                            <BrandLogo
-                                className="w-full h-full scale-[1.9] origin-center transition-transform duration-200 group-hover:scale-[1.9]"
-                                variant={isSolid ? "colored" : "colored"}
-                            />
-                        </div>
+                        <BrandLogo className="w-[55px] h-[55px] -mr-4" />
 
-                        <div className="flex font-space-grotesk flex-col justify-center tracking-tighter">
+                        <div className="flex flex-col leading-none">
                             <span
-                                className={` font-extrabold text-[18px] tracking-wide ${isSolid ? "text-brand-dark" : "text-white font-extrabold"
+                                className={`font-space-grotesk mt-1 leading-tighter font-extrabold text-[17px] transition-colors duration-300 ${isSolid ? "text-brand-dark" : "text-white"
                                     }`}
                             >
                                 FOCUS MOMENTS
                             </span>
 
-                            <span className="text-[14px] font-space-grotesk font-extrabold leading-[0.6em] tracking-widest text-brand-orange">
+                            <span className="text-[12.5px] tracking-[0.18em] text-brand-orange font-extrabold font-space-grotesk transition-colors duration-300">
                                 STUDIO
                             </span>
                         </div>

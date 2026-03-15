@@ -14,15 +14,15 @@ export default function Footer() {
                     <div className="flex flex-col gap-2">
                         <Link href="/" className="flex items-center gap-1 group w-fit">
 
-                            <div className="flex items-center justify-center w-[56px] h-[42px]">
+                            <div className="flex items-center justify-center -mr-2.5">
                                 <BrandLogo
-                                    className="w-full h-full scale-[1.9] origin-center"
+                                    className="w-[45px] h-[45px] md:w-[55px] md:h-[55px]"
                                     variant="white"
                                 />
                             </div>
 
                             <div className="flex flex-col justify-center font-space-grotesk tracking-wider leading-tight">
-                                <span className="font-bold text-[16px] tracking-[0.09em] text-white">
+                                <span className="font-bold text-[16px] tracking-[0.09em] mt-2 text-white">
                                     FOCUS MOMENTS
                                 </span>
 

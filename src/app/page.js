@@ -4,10 +4,8 @@ import SocialProof from "@/components/SocialProof";
 import Pricing from "@/components/Pricing";
 import About from "@/components/About";
 import Services from "@/components/Services";
-import Contact from "@/components/Contact";
 import FloatingContactButtons from "@/components/FloatingContactButtons";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-
 export const dynamic = 'force-dynamic';
 
 async function getHeroImages() {
