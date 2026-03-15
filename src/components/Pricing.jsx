@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Check, Star, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, Star, Phone } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const FALLBACK_PLANS = [
@@ -135,12 +135,6 @@ export default function Pricing() {
     const [loading, setLoading] = useState(true);
     const scrollContainerRef = useRef(null);
 
-    const scroll = (direction) => {
-        if (scrollContainerRef.current) {
-            const scrollAmount = 350; // Adjust as needed based on card width
-            scrollContainerRef.current.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
-        }
-    };
 
     useEffect(() => {
         async function fetchPlans() {
@@ -221,24 +215,8 @@ export default function Pricing() {
 
             {/* Cards — horizontal scroll on all devices */}
             <div className="w-full relative group/slider">
+                <div ref={scrollContainerRef} className="flex gap-3 lg:gap-5 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-[calc((100vw-1280px)/2+2rem)] pt-4 pb-12 scrollbar-none">
 
-                {/* Left/Right Navigation Buttons */}
-                <button
-                    onClick={() => scroll("left")}
-                    className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-brand-orange text-white p-3 md:p-4 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg border border-white/20 hover:scale-105 hidden sm:flex"
-                    aria-label="Scroll left"
-                >
-                    <ChevronLeft strokeWidth={2.5} size={24} />
-                </button>
-                <button
-                    onClick={() => scroll("right")}
-                    className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-brand-orange text-white p-3 md:p-4 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg border border-white/20 hover:scale-105 hidden sm:flex"
-                    aria-label="Scroll right"
-                >
-                    <ChevronRight strokeWidth={2.5} size={24} />
-                </button>
-
-                <div ref={scrollContainerRef} className="flex gap-4 lg:gap-5 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pt-4 pb-12 scrollbar-none">
                     {plans.map((plan, i) => (
                         <div key={plan.id || i} className="flex shrink-0 snap-start h-auto py-2">
                             <div

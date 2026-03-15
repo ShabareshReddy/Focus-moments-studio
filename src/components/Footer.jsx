@@ -8,25 +8,23 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Main Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-10 mb-10">
 
                     {/* Brand Col */}
                     <div className="flex flex-col gap-2">
-                        <Link href="/" className="flex items-center gap-1 group w-fit">
+                        <Link href="/" className="flex items-center gap-[6px]">
 
-                            <div className="flex items-center justify-center -mr-2.5">
-                                <BrandLogo
-                                    className="w-[45px] h-[45px] md:w-[55px] md:h-[55px]"
-                                    variant="white"
-                                />
-                            </div>
+                            <BrandLogo
+                                className="w-[55px] h-[54px] mt-1 -mr-4"
+                                variant="white"
+                            />
 
-                            <div className="flex flex-col justify-center font-space-grotesk tracking-wider leading-tight">
-                                <span className="font-bold text-[16px] tracking-[0.09em] mt-2 text-white">
+                            <div className="flex flex-col leading-none">
+                                <span className="font-space-grotesk mt-1.5 leading-tighter font-extrabold text-[17px] text-white">
                                     FOCUS MOMENTS
                                 </span>
 
-                                <span className="text-[13px] font-semibold tracking-[0.18em] text-brand-orange">
+                                <span className="text-[12.5px] tracking-[0.18em] text-brand-orange font-extrabold font-space-grotesk">
                                     STUDIO
                                 </span>
                             </div>
@@ -35,16 +33,28 @@ export default function Footer() {
                         <p className="text-sm font-faculty-glyphic  leading-relaxed text-white/40 max-w-xs">
                             "Capturing life's most beautiful moments with patience, creativity, and care in Tirupati."
                         </p>
-                        {/* Social Icon */}
-                        <a
-                            href="https://www.instagram.com/focus_momentsstudio/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-white/40 hover:text-brand-orange active:scale-90 active:opacity-70 transition-all duration-150 w-fit"
-                            aria-label="Instagram"
-                        >
-                            <Instagram size={20} />
-                        </a>
+                        <div className="flex items-center gap-4 mt-2">
+                            {/* Social Icon */}
+                            <a
+                                href="https://www.instagram.com/focus_moments_babystudio/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white/40 hover:text-brand-orange active:scale-90 active:opacity-70 transition-all duration-150"
+                                aria-label="Instagram"
+                            >
+                                <Instagram size={20} />
+                            </a>
+                            <a
+                                href="https://www.google.co.in/maps/place/Focus+moments+studio/@13.6381319,79.4095212,17z/data=!3m1!4b1!4m6!3m5!1s0x3a4d4b0d79595df5:0x2f33d015c284e26d!8m2!3d13.6381319!4d79.4141346!16s%2Fg%2F11wn0q1lng?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white/40 hover:text-brand-orange active:scale-90 active:opacity-70 transition-all duration-150"
+                                aria-label="Google Maps"
+                            >
+                                <MapPin size={20} />
+                            </a>
+                        </div>
+
                     </div>
 
                     {/* Quick Links */}

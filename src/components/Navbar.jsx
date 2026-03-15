@@ -41,11 +41,11 @@ export default function Navbar() {
                     {/* Logo: SVG icon + stacked text side by side */}
                     <Link href="/" className="flex items-center gap-[6px]">
 
-                        <BrandLogo className="w-[55px] h-[55px] -mr-4" />
+                        <BrandLogo className="w-[55px] h-[54px] mt-1 -mr-4" />
 
                         <div className="flex flex-col leading-none">
                             <span
-                                className={`font-space-grotesk mt-1 leading-tighter font-extrabold text-[17px] transition-colors duration-300 ${isSolid ? "text-brand-dark" : "text-white"
+                                className={`font-space-grotesk mt-1.5 leading-tighter font-extrabold text-[17px] transition-colors duration-300 ${isSolid ? "text-brand-dark" : "text-white"
                                     }`}
                             >
                                 FOCUS MOMENTS
