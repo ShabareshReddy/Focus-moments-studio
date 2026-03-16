@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid, MonitorPlay, Menu, X, IndianRupee, Save, ChevronDown } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Haldi", "Saree Functions", "Uncategorized"];
 const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models", "Birthdays", "Maternity", "Haldi", "Saree Functions"];
@@ -56,7 +57,12 @@ export default function AdminDashboard() {
             if (data) setPricingPlans(data);
         } catch (err) {
             console.error("Failed to fetch pricing plans:", err);
-            alert("Failed to load pricing plans. Make sure you created the 'pricing_plans' table.");
+            Swal.fire({
+                title: 'Error!',
+                text: "Failed to load pricing plans. Make sure you created the 'pricing_plans' table.",
+                icon: 'error',
+                confirmButtonColor: '#ea580c'
+            });
         } finally {
             setIsLoading(false);
         }
@@ -81,10 +87,21 @@ export default function AdminDashboard() {
                     
                 if (error) throw error;
             }
-            alert("Pricing plans successfully updated!");
+            Swal.fire({
+                title: 'Success!',
+                text: "Pricing plans successfully updated!",
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
         } catch (error) {
             console.error("Save error:", error);
-            alert(`Failed to save pricing: ${error.message}`);
+            Swal.fire({
+                title: 'Error!',
+                text: `Failed to save pricing: ${error.message}`,
+                icon: 'error',
+                confirmButtonColor: '#ea580c'
+            });
         } finally {
             setIsSavingPricing(false);
         }
@@ -169,16 +186,39 @@ export default function AdminDashboard() {
             // 3. Refresh gallery to show the newly uploaded image
             await fetchImages();
 
+            Swal.fire({
+                title: 'Success!',
+                text: "Image successfully uploaded!",
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
         } catch (error) {
             console.error("Upload error:", error);
-            alert(`Upload failed: ${error.message}`);
+            Swal.fire({
+                title: 'Error!',
+                text: `Upload failed: ${error.message}`,
+                icon: 'error',
+                confirmButtonColor: '#ea580c'
+            });
         } finally {
             setIsUploading(false);
         }
     };
 
     const handleDelete = async (path) => {
-        if (!confirm("Are you sure you want to delete this photo?")) return;
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ea580c',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Yes, delete it!'
+        });
+
+        if (!result.isConfirmed) return;
 
         setDeletingPath(path);
         try {
@@ -200,7 +240,12 @@ export default function AdminDashboard() {
             
         } catch (error) {
             console.error("Delete error:", error);
-            alert(`Delete failed: ${error.message}`);
+            Swal.fire({
+                title: 'Error!',
+                text: `Delete failed: ${error.message}`,
+                icon: 'error',
+                confirmButtonColor: '#ea580c'
+            });
         } finally {
             setDeletingPath(null);
         }

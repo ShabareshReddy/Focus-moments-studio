@@ -76,13 +76,13 @@ export default function Hero({ initialImages = [] }) {
                             animate={{
                                 opacity: isCurrent ? 1 : 0,
                                 zIndex: isCurrent ? 10 : (isPrev ? 5 : 0),
-                                scale: isCurrent ? 1 : 1.08
+                                scale: isCurrent ? 1 : 1.12
                             }}
                             transition={{
                                 opacity: {
-                                    duration: 2.5,
+                                    duration: 2,
                                     ease: "easeInOut",
-                                    delay: isCurrent ? 0 : 2.5 // Hold previous image visible during crossfade
+                                    delay: isCurrent ? 0 : 2 // Hold previous image visible during crossfade
                                 },
                                 zIndex: { duration: 0 },
                                 scale: { duration: 15, ease: "linear" }
