@@ -1,13 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function Services() {
+    const router = useRouter();
+
+    const handleCardClick = (category) => {
+        // Update the URL so Gallery reads the new category param
+        router.push(`/?category=${encodeURIComponent(category)}`, { scroll: false });
+
+        // Smooth-scroll to the portfolio/gallery section
+        setTimeout(() => {
+            const el = document.getElementById("portfolio");
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }, 50);
+    };
+
     const baseCategories = [
         {
             title: "Newborn Babys",
@@ -130,13 +145,17 @@ export default function Services() {
             <div className="w-full relative">
                 <div className="flex gap-3 lg:gap-4 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-12 pt-4 scrollbar-hide">
                     {serviceCategories.map((category, idx) => (
-                        <Link href={`/?category=${encodeURIComponent(category.category)}#portfolio`} key={idx} className="block shrink-0 snap-center first:ml-auto last:mr-[calc(100vw-85vw-32px)] sm:last:mr-[calc(100vw-400px-48px)] lg:last:mr-[calc(100vw-350px-64px)] xl:last:mr-auto">
+                        <div
+                            key={idx}
+                            onClick={() => handleCardClick(category.category)}
+                            className="block shrink-0 snap-center first:ml-auto last:mr-[calc(100vw-85vw-32px)] sm:last:mr-[calc(100vw-400px-48px)] lg:last:mr-[calc(100vw-350px-64px)] xl:last:mr-auto cursor-pointer"
+                        >
                             <motion.div
                                 initial={{ opacity: 0, x: -50 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                className="group relative w-[65vw] sm:w-[250px] lg:w-[280px] xl:w-[300px] aspect-[4/5] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5 cursor-pointer"
+                                className="group relative w-[65vw] sm:w-[250px] lg:w-[280px] xl:w-[300px] aspect-[4/5] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5"
                             >
                                 {/* Background Image */}
                                 <Image
@@ -166,7 +185,7 @@ export default function Services() {
                                     </div>
                                 </div>
                             </motion.div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             </div>
