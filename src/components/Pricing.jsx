@@ -19,7 +19,6 @@ const FALLBACK_PLANS = [
             "50+ edited photos",
             "Online gallery delivery",
             "1 printed frame (8×10)",
-            "Candid + posed shots",
         ],
     },
 
@@ -35,6 +34,7 @@ const FALLBACK_PLANS = [
             "Theme-based backdrop & props",
             "50+ edited photos",
             "Online gallery delivery",
+            "Candid + posed shots",
         ],
     },
     {
@@ -50,8 +50,6 @@ const FALLBACK_PLANS = [
             "100+ edited photos",
             "Cinematic reel (30 sec)",
             "Premium album (20 pages)",
-            "Same-day preview shots",
-            "Dedicated photographer",
         ],
     },
     {
@@ -67,9 +65,6 @@ const FALLBACK_PLANS = [
             "500+ edited photos",
             "Highlight reel video (3 min)",
             "Luxury album (40 pages)",
-            "Same-day edited slideshow",
-            "Drone shots (if permitted)",
-            "Online gallery for guests",
         ],
     },
     {
@@ -84,6 +79,7 @@ const FALLBACK_PLANS = [
             "Gown rentals available",
             "50+ edited photos",
             "Online gallery delivery",
+            "Candid + artistic shots",
         ],
     },
     {
@@ -98,6 +94,7 @@ const FALLBACK_PLANS = [
             "3 outfit changes",
             "30+ high-end retouched photos",
             "Online gallery delivery",
+            "Professional lighting setup",
         ],
     },
     {
@@ -112,6 +109,7 @@ const FALLBACK_PLANS = [
             "Candid + traditional photography",
             "150+ edited photos",
             "Short highlight video",
+            "Online gallery delivery",
         ],
     },
     {
@@ -126,6 +124,7 @@ const FALLBACK_PLANS = [
             "Candid + traditional photography",
             "150+ edited photos",
             "Short highlight video",
+            "Online gallery delivery",
         ],
     }
 ];
@@ -240,7 +239,7 @@ export default function Pricing() {
 
                                     {/* Features */}
                                     <ul className="space-y-3.5 mb-8 flex-1">
-                                        {plan.features.map((f, idx) => (
+                                        {(plan.features || []).slice(0, 5).map((f, idx) => (
                                             <li key={idx} className="flex items-start gap-3 text-white/80 font-space-grotesk text-sm">
                                                 <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-300 bg-brand-orange/20 text-brand-orange sm:bg-white/10 sm:text-white/60 sm:group-hover:bg-brand-orange/20 sm:group-hover:text-brand-orange">
                                                     <Check size={12} strokeWidth={3} />

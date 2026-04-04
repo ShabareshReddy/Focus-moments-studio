@@ -72,6 +72,15 @@ export default function AdminDashboard() {
         setPricingPlans(prev => prev.map((p, i) => i === planIndex ? { ...p, [field]: value } : p));
     };
 
+    const handleFeatureChange = (planIndex, featureIndex, value) => {
+        setPricingPlans(prev => prev.map((p, i) => {
+            if (i !== planIndex) return p;
+            const features = [...(p.features || ['', '', '', '', ''])];
+            features[featureIndex] = value;
+            return { ...p, features };
+        }));
+    };
+
 
     const savePricingPlans = async () => {
         setIsSavingPricing(true);
@@ -81,7 +90,8 @@ export default function AdminDashboard() {
                     .from('pricing_plans')
                     .update({
                         price: plan.price,
-                        duration: plan.duration
+                        duration: plan.duration,
+                        features: (plan.features || []).slice(0, 5).filter(f => f.trim() !== '')
                     })
                     .eq('id', plan.id);
                     
@@ -462,6 +472,24 @@ export default function AdminDashboard() {
                                         <div className="flex-1">
                                             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">Duration Session</label>
                                             <input type="text" value={plan.duration || ''} onChange={(e) => handlePricingChange(planIndex, 'duration', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-brand-orange outline-none" />
+                                        </div>
+                                    </div>
+                                    {/* Features Editor */}
+                                    <div className="border-t border-gray-100 pt-4">
+                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">Package Features (max 5)</label>
+                                        <div className="flex flex-col gap-2">
+                                            {[0,1,2,3,4].map(fi => (
+                                                <div key={fi} className="flex items-center gap-2">
+                                                    <span className="shrink-0 w-6 h-6 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-bold flex items-center justify-center">{fi + 1}</span>
+                                                    <input
+                                                        type="text"
+                                                        placeholder={`Feature ${fi + 1}…`}
+                                                        value={(plan.features || [])[fi] || ''}
+                                                        onChange={(e) => handleFeatureChange(planIndex, fi, e.target.value)}
+                                                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-brand-orange outline-none placeholder:text-gray-300 hover:border-gray-300 transition-colors"
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
