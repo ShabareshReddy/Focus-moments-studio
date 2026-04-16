@@ -90,7 +90,7 @@ export default function Services() {
                             .from("gallery-images")
                             .getPublicUrl(`services/${matchingFile.name}`);
                         // Cache-bust on fresh uploads
-                        return { ...cat, image: `${publicUrl}?t=${new Date(matchingFile.created_at || Date.now()).getTime()}` };
+                        return { ...cat, image: `${publicUrl}?v=${Date.now()}` };
                     }
                     return cat;
                 });
@@ -162,7 +162,8 @@ export default function Services() {
                                     src={category.image}
                                     alt={category.title}
                                     fill
-                                    className="object-cover"
+                                    unoptimized
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                                     sizes="(max-width: 640px) 100vw, 350px"
                                 />
 

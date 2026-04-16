@@ -6,6 +6,7 @@ import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid,
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import imageCompression from "browser-image-compression";
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Haldi", "Saree Functions", "Uncategorized"];
 const SERVICES_CATEGORIES = ["Newborn Babys", "Wedding", "Pre Weddings", "Models", "Birthdays", "Maternity", "Haldi", "Saree Functions"];
@@ -23,6 +24,7 @@ export default function AdminDashboard() {
     const [uploadCategory, setUploadCategory] = useState("Newborn Babys");
     const [activeTab, setActiveTab] = useState("gallery"); // "gallery" or "hero"
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     
     // Pricing state
     const [pricingPlans, setPricingPlans] = useState([]);
@@ -143,6 +145,9 @@ export default function AdminDashboard() {
                         .from('gallery-images')
                         .getPublicUrl(filePath);
                     
+                    // Add cache-buster to bypass any previously failed 403/404 browser cache
+                    const urlWithCacheBuster = `${publicUrl}?v=${Date.now()}`;
+                    
                     const parts = file.name.split('_');
                     const rawCategory = parts.length > 1 ? parts[0] : "Uncategorized";
                     // Reverse lookup: "NewbornBabys" → "Newborn Babys"
@@ -151,7 +156,7 @@ export default function AdminDashboard() {
                     return {
                         name: file.name,
                         path: filePath,
-                        url: publicUrl,
+                        url: urlWithCacheBuster,
                         category: category,
                         id: file.id || file.name
                     };
@@ -170,30 +175,77 @@ export default function AdminDashboard() {
         if (!file) return;
 
         setIsUploading(true);
+        setUploadProgress(0);
         // Reset input so the same file could be re-selected if needed
         e.target.value = null;
 
         try {
-            // 1. Build the file path directly — same convention as before
+            // 1. SILENT COMPRESSION & CONVERSION TO WEBP
+            const options = {
+                maxSizeMB: 3,
+                maxWidthOrHeight: 2560,
+                useWebWorker: true,
+                fileType: 'image/webp',
+                initialQuality: 0.9
+            };
+
+            let finalFile = file;
+            // Only compress if it's an image
+            if (file.type.startsWith('image/')) {
+                try {
+                    finalFile = await imageCompression(file, options);
+                } catch (compressError) {
+                    console.error("Compression failed, uploading original:", compressError);
+                    // Continue with original file if compression fails
+                }
+            }
+
+            // 2. Build the file path
             const folder = activeTab === "hero" ? "hero" : activeTab === "services" ? "services" : "uploads";
             const category = activeTab === "hero" ? "Hero" : uploadCategory;
-            const fileExt = file.name.split('.').pop();
             const safeCategory = category.replace(/[^a-zA-Z0-9-]/g, '');
-            const fileName = `${safeCategory}_${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+            
+            // Check if we actually have a webp (if compression succeeded)
+            const isWebP = finalFile.type === 'image/webp';
+            const extension = isWebP ? 'webp' : file.name.split('.').pop();
+            const fileName = `${safeCategory}_${Date.now()}-${Math.random().toString(36).substring(7)}.${extension}`;
             const filePath = `${folder}/${fileName}`;
 
-            // 2. Upload directly from the browser to Supabase Storage
-            // This bypasses Vercel's body-size limit — file goes browser → Supabase, not through your server
-            const { error: uploadError } = await supabase.storage
-                .from('gallery-images')
-                .upload(filePath, file, {
-                    contentType: file.type,
-                    upsert: false,
-                });
+            // Ensure finalFile is a named File object for Supabase
+            const uploadFile = new File([finalFile], fileName, { type: finalFile.type });
 
-            if (uploadError) throw new Error(uploadError.message);
+            // 3. Upload with real-time progress using XMLHttpRequest (as Supabase JS doesn't support progress)
+            await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                const uploadUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/gallery-images/${filePath}`;
+                
+                xhr.open('POST', uploadUrl);
+                xhr.setRequestHeader('apikey', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+                xhr.setRequestHeader('Authorization', `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`);
+                xhr.setRequestHeader('Content-Type', uploadFile.type);
+                xhr.setRequestHeader('x-upsert', 'false');
 
-            // 3. Refresh gallery to show the newly uploaded image
+                xhr.upload.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        const percent = Math.round((event.loaded / event.total) * 100);
+                        setUploadProgress(percent);
+                    }
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(xhr.response);
+                    } else {
+                        const errorMsg = xhr.statusText || 'Upload failed';
+                        reject(new Error(errorMsg));
+                    }
+                };
+
+                xhr.onerror = () => reject(new Error('Network error during upload'));
+                xhr.send(uploadFile);
+            });
+
+            // 4. Refresh gallery
             await fetchImages();
 
             Swal.fire({
@@ -214,6 +266,7 @@ export default function AdminDashboard() {
             });
         } finally {
             setIsUploading(false);
+            setUploadProgress(0);
         }
     };
 
@@ -410,7 +463,7 @@ export default function AdminDashboard() {
                                     className="flex items-center gap-2 bg-brand-dark text-white px-6 py-3 rounded-lg hover:bg-brand-orange cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:bg-brand-dark disabled:hover:shadow-sm disabled:cursor-not-allowed font-medium w-full sm:w-auto justify-center whitespace-nowrap"
                                 >
                                     {isUploading ? <Loader2 size={18} className="animate-spin" /> : <UploadCloud size={18} />}
-                                    {isUploading ? 'Uploading...' : 'Upload Photo'}
+                                    {isUploading ? `Uploading ${uploadProgress}%` : 'Upload Photo'}
                                 </button>
                                 </div>
                             )}
@@ -510,6 +563,7 @@ export default function AdminDashboard() {
                                         src={img.url}
                                         alt={img.name}
                                         fill
+                                        unoptimized
                                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                                     />

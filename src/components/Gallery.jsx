@@ -61,7 +61,7 @@ function GalleryContent() {
                     return {
                         id: file.id || file.name,
                         name: file.name,
-                        url: publicUrl,
+                        url: `${publicUrl}?v=${Date.now()}`,
                         category: category,
                     };
                 });
@@ -210,6 +210,7 @@ function GalleryContent() {
                                             src={img.url}
                                             alt={`Gallery Image ${img.name}`}
                                             fill
+                                            unoptimized
                                             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 25vw"
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
@@ -268,6 +269,7 @@ function GalleryContent() {
                                 src={filteredImages[lightboxIndex].url}
                                 alt={`Lightbox ${filteredImages[lightboxIndex].name}`}
                                 fill
+                                unoptimized
                                 className="object-contain"
                                 sizes="100vw"
                                 priority
