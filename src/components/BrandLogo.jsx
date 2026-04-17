@@ -7,6 +7,7 @@ export default function BrandLogo({ className = "" }) {
                 src="/Fmlogos.png"
                 alt="Focus Moments Studio Logo"
                 fill
+                unoptimized
                 className="object-contain"
                 priority
             />

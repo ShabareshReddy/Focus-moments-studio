@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Image as ImageIcon, Trash2, UploadCloud, Loader2, Filter, Grid, MonitorPlay, Menu, X, IndianRupee, Save, ChevronDown } from "lucide-react";
+import { CheckCircle2, ChevronRight, Download, Eye, FileImage, FileText, Globe, LogOut, Package, Plus, Save, Settings, ShieldCheck, Tag, Trash2, X, Loader2, Music, RefreshCw, Image as ImageIcon, UploadCloud, Filter, Grid, MonitorPlay, Menu, IndianRupee, ChevronDown } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -182,14 +182,16 @@ export default function AdminDashboard() {
         e.target.value = null;
 
         try {
-            // 1. SILENT COMPRESSION & CONVERSION TO WEBP
+            // 1. COMPRESS & CONVERT TO WEBP before upload
+            // Hero: full-bleed background → 2560px max, 0.8MB budget
+            // Gallery/Services: grid thumbnails → 1200px max, 0.3MB budget
             const isHero = activeTab === "hero";
             const options = {
-                maxSizeMB: isHero ? 1.0 : 0.6,
-                maxWidthOrHeight: isHero ? 2560 : 1920,
+                maxSizeMB: isHero ? 0.8 : 0.3,
+                maxWidthOrHeight: isHero ? 2560 : 1200,
                 useWebWorker: true,
-                fileType: 'image/jpeg',
-                initialQuality: 0.8
+                fileType: 'image/webp',
+                initialQuality: 0.75
             };
 
             let finalFile = file;
@@ -208,9 +210,8 @@ export default function AdminDashboard() {
             const category = activeTab === "hero" ? "Hero" : uploadCategory;
             const safeCategory = category.replace(/[^a-zA-Z0-9-]/g, '');
             
-            // Check if we actually have a webp (if compression succeeded)
-            const isWebP = finalFile.type === 'image/webp';
-            const extension = isWebP ? 'webp' : file.name.split('.').pop();
+            // Always use .webp extension since compression targets WebP
+            const extension = finalFile.type === 'image/webp' ? 'webp' : file.name.split('.').pop();
             const fileName = `${safeCategory}_${Date.now()}-${Math.random().toString(36).substring(7)}.${extension}`;
             const filePath = `${folder}/${fileName}`;
 
@@ -569,8 +570,12 @@ export default function AdminDashboard() {
                                         unoptimized
                                         priority={idx < 6}
                                         loading={idx < 6 ? undefined : "lazy"}
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                                        placeholder="blur"
+                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                                        className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-105"
+                                        onLoad={(e) => e.target.classList.remove('opacity-0')}
+                                        onError={(e) => e.target.classList.remove('opacity-0')}
+                                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
                                     />
                                     {/* Hover overlay with delete action */}
                                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">

@@ -62,7 +62,7 @@ export default function Services() {
         {
             title: "Saree Functions",
             category: "Saree Functions",
-            image: "https://images.unsplash.com/photo-1583391733956-6c78276477e1?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop",
         },
     ];
 
@@ -166,8 +166,16 @@ export default function Services() {
                                     unoptimized
                                     priority={idx < 3}
                                     loading={idx < 3 ? undefined : "lazy"}
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    sizes="(max-width: 640px) 100vw, 350px"
+                                    placeholder="blur"
+                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                                    className={`object-cover transition-all duration-300 ease-in-out group-hover:scale-105 ${idx < 3 ? "opacity-100" : "opacity-0"}`}
+                                    onLoad={(e) => {
+                                        if (idx >= 3) {
+                                            e.target.classList.remove('opacity-0');
+                                        }
+                                    }}
+                                    onError={(e) => e.target.classList.remove('opacity-0')}
+                                    sizes="(max-width: 640px) 75vw, (max-width: 1024px) 280px, 320px"
                                 />
 
                                 {/* Dark Gradient Overlay */}

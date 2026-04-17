@@ -72,6 +72,7 @@ export default function About() {
                                 src="/image/tobias-pfeifer-W_9dsX-Go5A-unsplash.jpg"
                                 alt="Focus Moments Studio Photography"
                                 fill
+                                unoptimized
                                 className="object-cover object-center"
                                 sizes="(max-width: 768px) 100vw, 40vw"
                             />

@@ -23,6 +23,7 @@ export default function Hero({ initialImages = [] }) {
     // Fetch hero images client-side to ensure bypass of Next.js static cache
     useEffect(() => {
         async function fetchHeroImages() {
+            if (initialImages.length > 0) return;
             try {
                 const { data, error } = await supabase.storage.from("gallery-images").list("hero", {
                     limit: 10,
@@ -75,28 +76,45 @@ export default function Hero({ initialImages = [] }) {
                             key={imgSrc}
                             initial={false}
                             animate={{
-                                opacity: isCurrent ? 1 : 0,
+                                opacity: isFirstRender
+                                    ? (index === 0 ? 1 : 0)   // 🚀 no animation on first load
+                                    : (isCurrent ? 1 : 0),
                                 zIndex: isCurrent ? 10 : (isPrev ? 5 : 0),
                                 scale: isCurrent ? 1 : 1.12
                             }}
                             transition={{
                                 opacity: {
-                                    duration: 2,
-                                    ease: "easeInOut",
-                                    delay: isCurrent ? 0 : 2 // Hold previous image visible during crossfade
+                                    duration: 1.2,
+                                    ease: "easeInOut",// Hold previous image visible during crossfade
                                 },
                                 zIndex: { duration: 0 },
                                 scale: { duration: 15, ease: "linear" }
                             }}
                             className="absolute inset-0"
                         >
+                            {/*
+                              * unoptimized is justified here:
+                              * Hero images are full-bleed 100vw backgrounds — the optimizer would
+                              * serve a 1920px version, which is the same as the source. The server-
+                              * side fetch adds latency & failure risk with negligible bandwidth gain.
+                              * Gallery grid (25vw × 30 images) is where optimization matters most.
+                              */}
                             <Image
                                 src={imgSrc}
                                 alt={`Focus Moments Studio Background ${index + 1}`}
                                 fill
                                 unoptimized
                                 priority={index === 0}
-                                className="object-cover object-center"
+                                loading={index === 0 ? "eager" : "lazy"}
+                                placeholder="blur"
+                                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                                className={`object-cover object-center`}
+                                onLoad={(e) => {
+                                    if (index !== 0) {
+                                        e.target.classList.remove('opacity-0');
+                                    }
+                                }}
+                                onError={(e) => e.target.classList.remove('opacity-0')}
                                 sizes="100vw"
                             />
                         </motion.div>

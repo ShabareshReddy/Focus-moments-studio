@@ -22,7 +22,7 @@ export default function GalleryPage() {
             const { data, error } = await supabase.storage
                 .from('gallery-images')
                 .list('uploads', { 
-                    limit: 100, 
+                    limit: 30, 
                     offset: 0, 
                     sortBy: { column: 'created_at', order: 'desc' },
                 }); 
@@ -106,8 +106,12 @@ export default function GalleryPage() {
                                     unoptimized
                                     priority={idx < 4}
                                     loading={idx < 4 ? undefined : "lazy"}
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    placeholder="blur"
+                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                                    className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-105"
+                                    onLoad={(e) => e.target.classList.remove('opacity-0')}
+                                    onError={(e) => e.target.classList.remove('opacity-0')}
+                                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                                 />
                                 {/* Optional dark overlay gradient for a premium look */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, useMemo, Suspense, memo } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { generateLQIP } from "@/lib/generateLQIP";
 import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn, ChevronDown } from "lucide-react";
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Haldi", "Saree Functions", "Uncategorized"];
@@ -14,6 +15,52 @@ const CATEGORY_MAP = Object.fromEntries(
     CATEGORIES.filter(c => c !== "All").map(cat => [cat.replace(/[^a-zA-Z0-9-]/g, ''), cat])
 );
 
+// Stable 1x1 fallback — used until real LQIP is computed
+const FALLBACK_BLUR =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII=";
+
+// Grid image card — memoized so cards don't re-render unless their own props change
+const GalleryCard = memo(function GalleryCard({ img, index, blurSrc, onOpen }) {
+    return (
+        <motion.div
+            key={img.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            onClick={() => onOpen(index)}
+            className="relative w-full aspect-square sm:aspect-[4/5] lg:aspect-[3/4] bg-gray-200 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
+        >
+            <Image
+                src={img.url}
+                alt={`Gallery Image ${img.name}`}
+                fill
+                unoptimized
+                priority={index < 4}
+                loading={index < 4 ? undefined : "lazy"}
+                placeholder="blur"
+                blurDataURL={blurSrc}
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                className={`object-cover transition-all duration-300 ease-in-out group-hover:scale-110 ${index < 4 ? "opacity-100" : "opacity-0"}`}
+                onLoad={(e) => {
+                    if (index >= 4) {
+                        e.target.classList.remove('opacity-0');
+                    }
+                }}
+                onError={(e) => e.target.classList.remove('opacity-0')}
+            />
+            {/* Hover overlay with zoom icon */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                <ZoomIn
+                    className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
+                    size={36}
+                    strokeWidth={1.5}
+                />
+            </div>
+        </motion.div>
+    );
+});
+
 function GalleryContent() {
     const searchParams = useSearchParams();
     const [images, setImages] = useState([]);
@@ -21,6 +68,7 @@ function GalleryContent() {
     const [activeCategory, setActiveCategory] = useState("All");
     const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
     const [visibleCount, setVisibleCount] = useState(20);
+    const [blurMap, setBlurMap] = useState({}); // url → base64 LQIP
 
     // Initial load and URL param parsing
     useEffect(() => {
@@ -32,13 +80,13 @@ function GalleryContent() {
         }
     }, [searchParams]);
 
-    const fetchImages = async () => {
+    const fetchImages = useCallback(async () => {
         try {
             const { data, error } = await supabase
                 .storage
                 .from('gallery-images')
                 .list('uploads', {
-                    limit: 100,
+                    limit: 30,   // Only fetch what we actually need
                     offset: 0,
                     sortBy: { column: 'created_at', order: 'desc' },
                 });
@@ -67,23 +115,55 @@ function GalleryContent() {
                     };
                 });
                 setImages(imagesWithUrls);
+
+                // Generate real LQIP blur placeholders in background (non-blocking)
+                generateBlurPlaceholders(imagesWithUrls);
             }
         } catch (error) {
             console.error('Error fetching images:', error);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    // The filtered list used for both grid AND lightbox navigation
-    const filteredImages = images.filter(
-        img => activeCategory === "All" || img.category === activeCategory
+    // Generate LQIP placeholders for the first batch of images
+    const generateBlurPlaceholders = useCallback(async (imageList) => {
+        const batch = imageList.slice(0, 20); // Only first visible set
+        const newBlurs = {};
+
+        // Process in small parallel batches to avoid overwhelming the browser
+        const BATCH_SIZE = 4;
+        for (let i = 0; i < batch.length; i += BATCH_SIZE) {
+            const chunk = batch.slice(i, i + BATCH_SIZE);
+            const results = await Promise.allSettled(
+                chunk.map(async (img) => {
+                    const lqip = await generateLQIP(img.url);
+                    return { url: img.url, lqip };
+                })
+            );
+            results.forEach((r) => {
+                if (r.status === "fulfilled") {
+                    newBlurs[r.value.url] = r.value.lqip;
+                }
+            });
+        }
+
+        setBlurMap(prev => ({ ...prev, ...newBlurs }));
+    }, []);
+
+    // Memoize filtered + displayed slices to avoid recomputing on every render
+    const filteredImages = useMemo(
+        () => images.filter(img => activeCategory === "All" || img.category === activeCategory),
+        [images, activeCategory]
     );
 
-    const displayedImages = filteredImages.slice(0, visibleCount);
+    const displayedImages = useMemo(
+        () => filteredImages.slice(0, visibleCount),
+        [filteredImages, visibleCount]
+    );
 
-    const openLightbox = (index) => setLightboxIndex(index);
-    const closeLightbox = () => setLightboxIndex(null);
+    const openLightbox = useCallback((index) => setLightboxIndex(index), []);
+    const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
     const goPrev = useCallback(() => {
         setLightboxIndex(prev => (prev - 1 + filteredImages.length) % filteredImages.length);
@@ -103,7 +183,7 @@ function GalleryContent() {
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [lightboxIndex, goPrev, goNext]);
+    }, [lightboxIndex, goPrev, goNext, closeLightbox]);
 
     // Prevent body scroll when lightbox is open
     useEffect(() => {
@@ -197,35 +277,13 @@ function GalleryContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 w-full">
                             <AnimatePresence>
                                 {displayedImages.map((img, index) => (
-                                    <motion.div
-                                        layout
+                                    <GalleryCard
                                         key={img.id}
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.95 }}
-                                        transition={{ duration: 0.4 }}
-                                        onClick={() => openLightbox(index)}
-                                        className="relative w-full aspect-square sm:aspect-[4/5] lg:aspect-[3/4] bg-gray-200 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
-                                    >
-                                        <Image
-                                            src={img.url}
-                                            alt={`Gallery Image ${img.name}`}
-                                            fill
-                                            unoptimized
-                                            priority={index < 4}
-                                            loading={index < 4 ? undefined : "lazy"}
-                                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 25vw"
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                        {/* Hover overlay with zoom icon */}
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                                            <ZoomIn
-                                                className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
-                                                size={36}
-                                                strokeWidth={1.5}
-                                            />
-                                        </div>
-                                    </motion.div>
+                                        img={img}
+                                        index={index}
+                                        blurSrc={blurMap[img.url] || FALLBACK_BLUR}
+                                        onOpen={openLightbox}
+                                    />
                                 ))}
                             </AnimatePresence>
                         </div>
@@ -271,9 +329,13 @@ function GalleryContent() {
                             <Image
                                 src={filteredImages[lightboxIndex].url}
                                 alt={`Lightbox ${filteredImages[lightboxIndex].name}`}
-                                                fill
-                                                unoptimized
-                                                className="object-contain"
+                                fill
+                                unoptimized
+                                placeholder="blur"
+                                blurDataURL={blurMap[filteredImages[lightboxIndex].url] || FALLBACK_BLUR}
+                                className="object-contain opacity-0 transition-opacity duration-300 ease-in-out"
+                                onLoad={(e) => e.target.classList.remove('opacity-0')}
+                                onError={(e) => e.target.classList.remove('opacity-0')}
                                 sizes="100vw"
                                 priority
                             />
