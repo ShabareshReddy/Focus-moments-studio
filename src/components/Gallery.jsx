@@ -181,19 +181,13 @@ function GalleryContent() {
                     className="text-center mb-12"
                 >
                     <motion.span
-                        variants={{
-                            hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
-                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
+
                         className="inline-block px-2 py-1 rounded-sm bg-transparent border border-black/30 text-brand-orange text-sm font-bold tracking-[0.2em] mb-3 uppercase"
                     >
                         Portfolio
                     </motion.span>
                     <motion.h3
-                        variants={{
-                            hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
-                            visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } }
-                        }}
+
                         className="text-3xl md:text-5xl font-instrument italic font-medium tracking-wide text-brand-dark"
                     >
                         Our Gallery

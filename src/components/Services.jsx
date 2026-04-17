@@ -23,52 +23,21 @@ export default function Services() {
         }, 50);
     };
 
+    // All known service categories (no fallback images)
     const baseCategories = [
-        {
-            title: "Newborn Babys",
-            category: "Newborn Babys",
-            image: "https://images.unsplash.com/photo-1519689680058-324335c77eba",
-        },
-        {
-            title: "Weddings",
-            category: "Wedding",
-            image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
-        },
-        {
-            title: "Pre Weddings",
-            category: "Pre Weddings",
-            image: "https://images.unsplash.com/photo-1519741497674-611481863552",
-        },
-        {
-            title: "Models",
-            category: "Models",
-            image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        },
-        {
-            title: "Birthdays",
-            category: "Birthdays",
-            image: "https://images.unsplash.com/photo-1530103862676-de88d12226dd",
-        },
-        {
-            title: "Maternity",
-            category: "Maternity",
-            image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74",
-        },
-        {
-            title: "Haldi",
-            category: "Haldi",
-            image: "https://images.unsplash.com/photo-1601662528567-526cd06f6582",
-        },
-        {
-            title: "Saree Functions",
-            category: "Saree Functions",
-            image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c",
-        },
+        { title: "Newborn Babys", category: "Newborn Babys" },
+        { title: "Weddings", category: "Wedding" },
+        { title: "Pre Weddings", category: "Pre Weddings" },
+        { title: "Models", category: "Models" },
+        { title: "Birthdays", category: "Birthdays" },
+        { title: "Maternity", category: "Maternity" },
+        { title: "Haldi", category: "Haldi" },
+        { title: "Saree Functions", category: "Saree Functions" },
     ];
 
-    const [serviceCategories, setServiceCategories] = useState(baseCategories);
+    // Only show cards where the client has uploaded an image in Supabase
+    const [serviceCategories, setServiceCategories] = useState([]);
 
-    // Fetch matching category images from Supabase storage
     useEffect(() => {
         async function fetchServiceImages() {
             try {
@@ -80,8 +49,8 @@ export default function Services() {
 
                 if (error || !data) return;
 
-                const updatedCategories = baseCategories.map(cat => {
-                    // Strip spaces so "Newborn Babys" → "newbornbabys" to match filename prefix
+                const withImages = baseCategories.reduce((acc, cat) => {
+                    // Normalise category name to match uploaded filename prefix
                     const safeCategory = cat.category.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
                     const matchingFile = data.find(f => f.name.toLowerCase().startsWith(safeCategory));
 
@@ -89,12 +58,13 @@ export default function Services() {
                         const { data: { publicUrl } } = supabase.storage
                             .from("gallery-images")
                             .getPublicUrl(`services/${matchingFile.name}`);
-                        return { ...cat, image: publicUrl };
+                        acc.push({ ...cat, image: publicUrl });
                     }
-                    return cat;
-                });
+                    // No matching file → skip this category entirely
+                    return acc;
+                }, []);
 
-                setServiceCategories(updatedCategories);
+                setServiceCategories(withImages);
             } catch (err) {
                 console.error("Failed to load services images:", err);
             }
@@ -102,6 +72,9 @@ export default function Services() {
 
         fetchServiceImages();
     }, []);
+
+    // Hide the whole section until at least one image has been uploaded
+    if (serviceCategories.length === 0) return null;
 
     return (
         <section id="services" className="py-24 bg-[#f8f9fa] overflow-hidden">
@@ -120,19 +93,18 @@ export default function Services() {
                     className="flex flex-col items-center justify-center text-center mb-12"
                 >
                     <motion.h2
-                        variants={{ hidden: { opacity: 0, y: 40, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
                         className="text-sm font-space-grotesk rounded-md px-2 py-1 border border-black/20 font-bold tracking-widest text-brand-orange uppercase mb-3"
                     >
                         Our Expertise
                     </motion.h2>
                     <motion.h3
-                        variants={{ hidden: { opacity: 0, y: 40, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
+
                         className="text-4xl md:text-5xl lg:text-6xl font-instrument italic font-medium text-brand-dark mb-4"
                     >
                         Photography Services
                     </motion.h3>
                     <motion.p
-                        variants={{ hidden: { opacity: 0, y: 40, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } } }}
+
                         className="text-brand-dark/60 font-space-grotesk max-w-lg text-base md:text-lg mx-auto"
                     >
                         Swipe through to discover our specialized sessions.
