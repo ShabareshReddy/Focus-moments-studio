@@ -40,8 +40,9 @@ export default function Hero({ initialImages = [] }) {
                     const { data: { publicUrl } } = supabase.storage
                         .from("gallery-images")
                         .getPublicUrl(`hero/${file.name}`);
-                    // Cache bust to ensure fresh display
-                    return `${publicUrl}?v=${Date.now()}`;
+                    // Use a STABLE cache-buster based on file creation time.
+                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
+                    return `${publicUrl}?v=${fileTimestamp}`;
                 });
 
                 setImages(imageUrls);
@@ -93,8 +94,8 @@ export default function Hero({ initialImages = [] }) {
                                 src={imgSrc}
                                 alt={`Focus Moments Studio Background ${index + 1}`}
                                 fill
-                                priority={index === 0}
                                 unoptimized
+                                priority={index === 0}
                                 className="object-cover object-center"
                                 sizes="100vw"
                             />

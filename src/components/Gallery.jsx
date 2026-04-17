@@ -58,10 +58,11 @@ function GalleryContent() {
                     // Reverse lookup: "NewbornBabys" → "Newborn Babys"
                     const category = CATEGORY_MAP[rawCategory] || rawCategory;
 
+                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
                     return {
                         id: file.id || file.name,
                         name: file.name,
-                        url: `${publicUrl}?v=${Date.now()}`,
+                        url: `${publicUrl}?v=${fileTimestamp}`,
                         category: category,
                     };
                 });
@@ -211,6 +212,8 @@ function GalleryContent() {
                                             alt={`Gallery Image ${img.name}`}
                                             fill
                                             unoptimized
+                                            priority={index < 4}
+                                            loading={index < 4 ? undefined : "lazy"}
                                             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 25vw"
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
@@ -268,9 +271,9 @@ function GalleryContent() {
                             <Image
                                 src={filteredImages[lightboxIndex].url}
                                 alt={`Lightbox ${filteredImages[lightboxIndex].name}`}
-                                fill
-                                unoptimized
-                                className="object-contain"
+                                                fill
+                                                unoptimized
+                                                className="object-contain"
                                 sizes="100vw"
                                 priority
                             />

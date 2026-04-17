@@ -145,8 +145,10 @@ export default function AdminDashboard() {
                         .from('gallery-images')
                         .getPublicUrl(filePath);
                     
-                    // Add cache-buster to bypass any previously failed 403/404 browser cache
-                    const urlWithCacheBuster = `${publicUrl}?v=${Date.now()}`;
+                    // Use a STABLE cache-buster based on file creation time. 
+                    // This allows Next.js to optimize and cache the image properly, fixing the lag.
+                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
+                    const urlWithCacheBuster = `${publicUrl}?v=${fileTimestamp}`;
                     
                     const parts = file.name.split('_');
                     const rawCategory = parts.length > 1 ? parts[0] : "Uncategorized";
@@ -181,12 +183,13 @@ export default function AdminDashboard() {
 
         try {
             // 1. SILENT COMPRESSION & CONVERSION TO WEBP
+            const isHero = activeTab === "hero";
             const options = {
-                maxSizeMB: 3,
-                maxWidthOrHeight: 2560,
+                maxSizeMB: isHero ? 1.0 : 0.6,
+                maxWidthOrHeight: isHero ? 2560 : 1920,
                 useWebWorker: true,
-                fileType: 'image/webp',
-                initialQuality: 0.9
+                fileType: 'image/jpeg',
+                initialQuality: 0.8
             };
 
             let finalFile = file;
@@ -557,13 +560,15 @@ export default function AdminDashboard() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
                             {images
                                 .filter(img => activeTab === "hero" || activeTab === "services" || filterCategory === "All" || img.category === filterCategory)
-                                .map((img) => (
+                                .map((img, idx) => (
                                 <div key={img.id} className="group relative overflow-hidden bg-gray-200 border border-gray-200 shadow-sm aspect-square">
                                     <Image 
                                         src={img.url}
                                         alt={img.name}
                                         fill
                                         unoptimized
+                                        priority={idx < 6}
+                                        loading={idx < 6 ? undefined : "lazy"}
                                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                                     />

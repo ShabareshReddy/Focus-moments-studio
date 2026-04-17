@@ -89,8 +89,9 @@ export default function Services() {
                         const { data: { publicUrl } } = supabase.storage
                             .from("gallery-images")
                             .getPublicUrl(`services/${matchingFile.name}`);
-                        // Cache-bust on fresh uploads
-                        return { ...cat, image: `${publicUrl}?v=${Date.now()}` };
+                        // Use a STABLE cache-buster based on file creation time.
+                        const fileTimestamp = matchingFile.created_at ? new Date(matchingFile.created_at).getTime() : Date.now();
+                        return { ...cat, image: `${publicUrl}?v=${fileTimestamp}` };
                     }
                     return cat;
                 });
@@ -163,6 +164,8 @@ export default function Services() {
                                     alt={category.title}
                                     fill
                                     unoptimized
+                                    priority={idx < 3}
+                                    loading={idx < 3 ? undefined : "lazy"}
                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                     sizes="(max-width: 640px) 100vw, 350px"
                                 />

@@ -43,9 +43,10 @@ export default function GalleryPage() {
                     const parts = file.name.split('_');
                     const category = parts.length > 1 ? parts[0] : "Uncategorized";
 
+                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
                     return {
                         name: file.name,
-                        url: publicUrl,
+                        url: `${publicUrl}?v=${fileTimestamp}`,
                         category: category,
                         id: file.id || file.name
                     };
@@ -96,12 +97,15 @@ export default function GalleryPage() {
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                         {images
                             .filter(img => activeCategory === "All" || img.category === activeCategory)
-                            .map((img) => (
+                            .map((img, idx) => (
                             <div key={img.id} className="relative w-full aspect-square group overflow-hidden rounded-xl shadow-lg bg-white/5 border border-white/10 hover:border-brand-orange/50 transition-colors duration-300">
                                 <Image
                                     src={img.url}
                                     alt={img.name}
                                     fill
+                                    unoptimized
+                                    priority={idx < 4}
+                                    loading={idx < 4 ? undefined : "lazy"}
                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                 />
