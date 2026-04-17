@@ -27,42 +27,42 @@ export default function Services() {
         {
             title: "Newborn Babys",
             category: "Newborn Babys",
-            image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1519689680058-324335c77eba",
         },
         {
             title: "Weddings",
             category: "Wedding",
-            image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
         },
         {
             title: "Pre Weddings",
             category: "Pre Weddings",
-            image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1519741497674-611481863552",
         },
         {
             title: "Models",
             category: "Models",
-            image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
         },
         {
             title: "Birthdays",
             category: "Birthdays",
-            image: "https://images.unsplash.com/photo-1530103862676-de88d12226dd?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1530103862676-de88d12226dd",
         },
         {
             title: "Maternity",
             category: "Maternity",
-            image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74",
         },
         {
             title: "Haldi",
             category: "Haldi",
-            image: "https://images.unsplash.com/photo-1601662528567-526cd06f6582?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1601662528567-526cd06f6582",
         },
         {
             title: "Saree Functions",
             category: "Saree Functions",
-            image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c",
         },
     ];
 
@@ -89,9 +89,7 @@ export default function Services() {
                         const { data: { publicUrl } } = supabase.storage
                             .from("gallery-images")
                             .getPublicUrl(`services/${matchingFile.name}`);
-                        // Use a STABLE cache-buster based on file creation time.
-                        const fileTimestamp = matchingFile.created_at ? new Date(matchingFile.created_at).getTime() : Date.now();
-                        return { ...cat, image: `${publicUrl}?v=${fileTimestamp}` };
+                        return { ...cat, image: publicUrl };
                     }
                     return cat;
                 });
@@ -163,18 +161,12 @@ export default function Services() {
                                     src={category.image}
                                     alt={category.title}
                                     fill
-                                    unoptimized
                                     priority={idx < 3}
                                     loading={idx < 3 ? undefined : "lazy"}
+                                    unoptimized
                                     placeholder="blur"
                                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
-                                    className={`object-cover transition-all duration-300 ease-in-out group-hover:scale-105 ${idx < 3 ? "opacity-100" : "opacity-0"}`}
-                                    onLoad={(e) => {
-                                        if (idx >= 3) {
-                                            e.target.classList.remove('opacity-0');
-                                        }
-                                    }}
-                                    onError={(e) => e.target.classList.remove('opacity-0')}
+                                    className="object-cover transition-all duration-300 ease-in-out group-hover:scale-105"
                                     sizes="(max-width: 640px) 75vw, (max-width: 1024px) 280px, 320px"
                                 />
 

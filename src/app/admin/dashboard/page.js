@@ -145,10 +145,7 @@ export default function AdminDashboard() {
                         .from('gallery-images')
                         .getPublicUrl(filePath);
                     
-                    // Use a STABLE cache-buster based on file creation time. 
-                    // This allows Next.js to optimize and cache the image properly, fixing the lag.
-                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
-                    const urlWithCacheBuster = `${publicUrl}?v=${fileTimestamp}`;
+                    const url = publicUrl;
                     
                     const parts = file.name.split('_');
                     const rawCategory = parts.length > 1 ? parts[0] : "Uncategorized";
@@ -158,7 +155,7 @@ export default function AdminDashboard() {
                     return {
                         name: file.name,
                         path: filePath,
-                        url: urlWithCacheBuster,
+                        url: url,
                         category: category,
                         id: file.id || file.name
                     };
@@ -187,23 +184,29 @@ export default function AdminDashboard() {
             // Gallery/Services: grid thumbnails → 1200px max, 0.3MB budget
             const isHero = activeTab === "hero";
             const options = {
-                maxSizeMB: isHero ? 0.8 : 0.3,
-                maxWidthOrHeight: isHero ? 2560 : 1200,
+                maxWidthOrHeight: isHero ? 2200 : 1400,
+                initialQuality: isHero ? 0.9 : 0.85,
                 useWebWorker: true,
                 fileType: 'image/webp',
-                initialQuality: 0.75
             };
 
             let finalFile = file;
-            // Only compress if it's an image
-            if (file.type.startsWith('image/')) {
-                try {
-                    finalFile = await imageCompression(file, options);
-                } catch (compressError) {
-                    console.error("Compression failed, uploading original:", compressError);
-                    // Continue with original file if compression fails
-                }
-            }
+
+// Only compress if it's an image AND large enough
+if (file.type.startsWith('image/')) {
+    try {
+        // ✅ Skip compression for small files (< 1MB)
+        if (file.size < 1 * 1024 * 1024) {
+            console.log("Skipping compression (small file)");
+            finalFile = file;
+        } else {
+            console.log("Compressing image...");
+            finalFile = await imageCompression(file, options);
+        }
+    } catch (compressError) {
+        console.error("Compression failed, uploading original:", compressError);
+    }
+}
 
             // 2. Build the file path
             const folder = activeTab === "hero" ? "hero" : activeTab === "services" ? "services" : "uploads";
@@ -572,9 +575,7 @@ export default function AdminDashboard() {
                                         loading={idx < 6 ? undefined : "lazy"}
                                         placeholder="blur"
                                         blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
-                                        className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-105"
-                                        onLoad={(e) => e.target.classList.remove('opacity-0')}
-                                        onError={(e) => e.target.classList.remove('opacity-0')}
+                                        className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
                                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
                                     />
                                     {/* Hover overlay with delete action */}

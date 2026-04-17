@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { generateLQIP } from "@/lib/generateLQIP";
 import { Loader2, X, ChevronLeft, ChevronRight, ZoomIn, ChevronDown } from "lucide-react";
 
 const CATEGORIES = ["All", "Newborn Babys", "Wedding", "Pre Weddings", "Models", "Maternity", "Birthdays", "Events", "Haldi", "Saree Functions", "Uncategorized"];
@@ -20,7 +19,7 @@ const FALLBACK_BLUR =
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII=";
 
 // Grid image card — memoized so cards don't re-render unless their own props change
-const GalleryCard = memo(function GalleryCard({ img, index, blurSrc, onOpen }) {
+const GalleryCard = memo(function GalleryCard({ img, index, onOpen }) {
     return (
         <motion.div
             key={img.id}
@@ -35,19 +34,13 @@ const GalleryCard = memo(function GalleryCard({ img, index, blurSrc, onOpen }) {
                 src={img.url}
                 alt={`Gallery Image ${img.name}`}
                 fill
-                unoptimized
                 priority={index < 4}
                 loading={index < 4 ? undefined : "lazy"}
+                unoptimized
                 placeholder="blur"
-                blurDataURL={blurSrc}
+                blurDataURL={FALLBACK_BLUR}
                 sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                className={`object-cover transition-all duration-300 ease-in-out group-hover:scale-110 ${index < 4 ? "opacity-100" : "opacity-0"}`}
-                onLoad={(e) => {
-                    if (index >= 4) {
-                        e.target.classList.remove('opacity-0');
-                    }
-                }}
-                onError={(e) => e.target.classList.remove('opacity-0')}
+                className="object-cover transition-all duration-300 ease-in-out group-hover:scale-110"
             />
             {/* Hover overlay with zoom icon */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
@@ -68,7 +61,6 @@ function GalleryContent() {
     const [activeCategory, setActiveCategory] = useState("All");
     const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
     const [visibleCount, setVisibleCount] = useState(20);
-    const [blurMap, setBlurMap] = useState({}); // url → base64 LQIP
 
     // Initial load and URL param parsing
     useEffect(() => {
@@ -106,18 +98,14 @@ function GalleryContent() {
                     // Reverse lookup: "NewbornBabys" → "Newborn Babys"
                     const category = CATEGORY_MAP[rawCategory] || rawCategory;
 
-                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
                     return {
                         id: file.id || file.name,
                         name: file.name,
-                        url: `${publicUrl}?v=${fileTimestamp}`,
+                        url: publicUrl,
                         category: category,
                     };
                 });
                 setImages(imagesWithUrls);
-
-                // Generate real LQIP blur placeholders in background (non-blocking)
-                generateBlurPlaceholders(imagesWithUrls);
             }
         } catch (error) {
             console.error('Error fetching images:', error);
@@ -126,29 +114,9 @@ function GalleryContent() {
         }
     }, []);
 
-    // Generate LQIP placeholders for the first batch of images
-    const generateBlurPlaceholders = useCallback(async (imageList) => {
-        const batch = imageList.slice(0, 20); // Only first visible set
-        const newBlurs = {};
-
-        // Process in small parallel batches to avoid overwhelming the browser
-        const BATCH_SIZE = 4;
-        for (let i = 0; i < batch.length; i += BATCH_SIZE) {
-            const chunk = batch.slice(i, i + BATCH_SIZE);
-            const results = await Promise.allSettled(
-                chunk.map(async (img) => {
-                    const lqip = await generateLQIP(img.url);
-                    return { url: img.url, lqip };
-                })
-            );
-            results.forEach((r) => {
-                if (r.status === "fulfilled") {
-                    newBlurs[r.value.url] = r.value.lqip;
-                }
-            });
-        }
-
-        setBlurMap(prev => ({ ...prev, ...newBlurs }));
+    // Load more images logic
+    const handleLoadMore = useCallback(() => {
+        setVisibleCount(prev => prev + 20);
     }, []);
 
     // Memoize filtered + displayed slices to avoid recomputing on every render
@@ -281,7 +249,6 @@ function GalleryContent() {
                                         key={img.id}
                                         img={img}
                                         index={index}
-                                        blurSrc={blurMap[img.url] || FALLBACK_BLUR}
                                         onOpen={openLightbox}
                                     />
                                 ))}
@@ -332,10 +299,8 @@ function GalleryContent() {
                                 fill
                                 unoptimized
                                 placeholder="blur"
-                                blurDataURL={blurMap[filteredImages[lightboxIndex].url] || FALLBACK_BLUR}
-                                className="object-contain opacity-0 transition-opacity duration-300 ease-in-out"
-                                onLoad={(e) => e.target.classList.remove('opacity-0')}
-                                onError={(e) => e.target.classList.remove('opacity-0')}
+                                blurDataURL={FALLBACK_BLUR}
+                                className="object-contain"
                                 sizes="100vw"
                                 priority
                             />

@@ -30,7 +30,7 @@ async function getHeroImages() {
       const { data: { publicUrl } } = supabaseAdmin.storage
         .from("gallery-images")
         .getPublicUrl(`hero/${file.name}`);
-      return `${publicUrl}?t=${new Date(file.created_at || Date.now()).getTime()}`;
+      return publicUrl;
     });
   } catch {
     return [];

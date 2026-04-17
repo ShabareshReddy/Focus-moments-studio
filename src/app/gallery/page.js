@@ -43,10 +43,9 @@ export default function GalleryPage() {
                     const parts = file.name.split('_');
                     const category = parts.length > 1 ? parts[0] : "Uncategorized";
 
-                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
                     return {
                         name: file.name,
-                        url: `${publicUrl}?v=${fileTimestamp}`,
+                        url: publicUrl,
                         category: category,
                         id: file.id || file.name
                     };
@@ -103,14 +102,11 @@ export default function GalleryPage() {
                                     src={img.url}
                                     alt={img.name}
                                     fill
-                                    unoptimized
                                     priority={idx < 4}
                                     loading={idx < 4 ? undefined : "lazy"}
                                     placeholder="blur"
                                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
-                                    className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-105"
-                                    onLoad={(e) => e.target.classList.remove('opacity-0')}
-                                    onError={(e) => e.target.classList.remove('opacity-0')}
+                                    className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
                                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                                 />
                                 {/* Optional dark overlay gradient for a premium look */}

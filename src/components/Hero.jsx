@@ -41,9 +41,7 @@ export default function Hero({ initialImages = [] }) {
                     const { data: { publicUrl } } = supabase.storage
                         .from("gallery-images")
                         .getPublicUrl(`hero/${file.name}`);
-                    // Use a STABLE cache-buster based on file creation time.
-                    const fileTimestamp = file.created_at ? new Date(file.created_at).getTime() : Date.now();
-                    return `${publicUrl}?v=${fileTimestamp}`;
+                    return publicUrl;
                 });
 
                 setImages(imageUrls);
@@ -92,35 +90,24 @@ export default function Hero({ initialImages = [] }) {
                             }}
                             className="absolute inset-0"
                         >
-                            {/*
-                              * unoptimized is justified here:
-                              * Hero images are full-bleed 100vw backgrounds — the optimizer would
-                              * serve a 1920px version, which is the same as the source. The server-
-                              * side fetch adds latency & failure risk with negligible bandwidth gain.
-                              * Gallery grid (25vw × 30 images) is where optimization matters most.
-                              */}
                             <Image
                                 src={imgSrc}
                                 alt={`Focus Moments Studio Background ${index + 1}`}
                                 fill
-                                unoptimized
                                 priority={index === 0}
                                 loading={index === 0 ? "eager" : "lazy"}
+                                unoptimized
                                 placeholder="blur"
                                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
                                 className={`object-cover object-center`}
-                                onLoad={(e) => {
-                                    if (index !== 0) {
-                                        e.target.classList.remove('opacity-0');
-                                    }
-                                }}
-                                onError={(e) => e.target.classList.remove('opacity-0')}
                                 sizes="100vw"
                             />
                         </motion.div>
+
                     );
                 })}
                 {/* Dark overlay */}
+                console.log()
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/70 via-transparent to-transparent z-10" />
             </div>
 
