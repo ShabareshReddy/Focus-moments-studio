@@ -561,7 +561,7 @@ export default function AdminDashboard() {
                             {images
                                 .filter(img => activeTab === "hero" || activeTab === "services" || filterCategory === "All" || img.category === filterCategory)
                                 .map((img, idx) => (
-                                <div key={img.id} className="group relative overflow-hidden bg-gray-200 border border-gray-200 shadow-sm aspect-square">
+                                <div key={img.id} className="group relative overflow-hidden bg-gray-200 border border-gray-200 shadow-sm aspect-square sm:aspect-[4/5] lg:aspect-[3/4]">
                                     <Image 
                                         src={img.url}
                                         alt={img.name}

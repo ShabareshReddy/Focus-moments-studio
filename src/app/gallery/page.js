@@ -98,7 +98,7 @@ export default function GalleryPage() {
                         {images
                             .filter(img => activeCategory === "All" || img.category === activeCategory)
                             .map((img, idx) => (
-                            <div key={img.id} className="relative w-full aspect-square group overflow-hidden rounded-xl shadow-lg bg-white/5 border border-white/10 hover:border-brand-orange/50 transition-colors duration-300">
+                            <div key={img.id} className="relative w-full aspect-square sm:aspect-[4/5] lg:aspect-[3/4] group overflow-hidden rounded-xl shadow-lg bg-white/10 border border-white/10 hover:border-brand-orange/50 transition-colors duration-300">
                                 <Image
                                     src={img.url}
                                     alt={img.name}

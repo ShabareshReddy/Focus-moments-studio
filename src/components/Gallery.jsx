@@ -205,7 +205,7 @@ function GalleryContent() {
                                         exit={{ opacity: 0, scale: 0.95 }}
                                         transition={{ duration: 0.4 }}
                                         onClick={() => openLightbox(index)}
-                                        className="relative w-full aspect-[4/5] bg-gray-100 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
+                                        className="relative w-full aspect-square sm:aspect-[4/5] lg:aspect-[3/4] bg-gray-200 overflow-hidden group shadow-sm hover:shadow-xl transition-all cursor-pointer"
                                     >
                                         <Image
                                             src={img.url}

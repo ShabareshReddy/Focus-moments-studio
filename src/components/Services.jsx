@@ -156,7 +156,7 @@ export default function Services() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                className="group relative w-[65vw] sm:w-[250px] lg:w-[280px] xl:w-[300px] aspect-[4/5] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5"
+                                className="group relative w-[75vw] sm:w-[250px] lg:w-[280px] xl:w-[320px] aspect-[4/5] md:aspect-[3/4] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-black/5"
                             >
                                 {/* Background Image */}
                                 <Image
