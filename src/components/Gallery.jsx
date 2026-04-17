@@ -274,7 +274,7 @@ function GalleryContent() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-white/90 backdrop-blur-sm"
                         onClick={closeLightbox} // click backdrop to close
                     >
                         {/* Stop click propagation on the image wrapper */}
@@ -303,7 +303,7 @@ function GalleryContent() {
                         {/* Close Button */}
                         <button
                             onClick={closeLightbox}
-                            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 active:scale-90 backdrop-blur-md flex items-center justify-center text-white transition-all duration-150"
+                            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 active:scale-90 backdrop-blur-md flex items-center justify-center text-black transition-all duration-150"
                             aria-label="Close"
                         >
                             <X size={20} />
@@ -313,7 +313,7 @@ function GalleryContent() {
                         {filteredImages.length > 1 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); goPrev(); }}
-                                className="absolute left-3 sm:left-6 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 active:scale-90 backdrop-blur-md flex items-center justify-center text-white transition-all duration-150"
+                                className="absolute left-3 sm:left-6 z-10 w-11 h-11 rounded-full bg-black/5 hover:bg-black/10 active:scale-90 backdrop-blur-md flex items-center justify-center text-black transition-all duration-150"
                                 aria-label="Previous"
                             >
                                 <ChevronLeft size={24} />
@@ -324,7 +324,7 @@ function GalleryContent() {
                         {filteredImages.length > 1 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); goNext(); }}
-                                className="absolute right-3 sm:right-6 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 active:scale-90 backdrop-blur-md flex items-center justify-center text-white transition-all duration-150"
+                                className="absolute right-3 sm:right-6 z-10 w-11 h-11 rounded-full bg-black/5 hover:bg-black/10 active:scale-90 backdrop-blur-md flex items-center justify-center text-black transition-all duration-150"
                                 aria-label="Next"
                             >
                                 <ChevronRight size={24} />
@@ -332,7 +332,7 @@ function GalleryContent() {
                         )}
 
                         {/* Image counter */}
-                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-white text-sm font-medium">
+                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 px-4 py-1.5 rounded-full bg-black/5 backdrop-blur-md text-black text-sm font-medium">
                             {lightboxIndex + 1} / {filteredImages.length}
                         </div>
                     </motion.div>
